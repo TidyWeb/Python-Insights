@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reading and planning code &middot; Python Insights</title>
+<link rel="stylesheet" href="assets/lesson-guide.css">
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<aside class="rail" aria-label="Guide navigation">
+  <div class="brand"><a class="brand-mark brand-home" href="index.html" aria-label="Back to the overview"><span aria-hidden="true">&#9656;</span></a><div><p class="eyebrow">Python insights</p><p class="brand-name">Reading and planning code</p></div></div>
+  <nav class="section-nav" aria-label="On this page"><ol>
+    
+    <li><a href="#seeing-the-shape-first"><span>01</span> Seeing the shape first</a></li><li><a href="#top-to-bottom"><span>02</span> Top to bottom</a></li>
+  </ol></nav>
+  <nav class="course-nav" aria-label="Chapters">
+    <p>Chapters</p>
+    <ol>
+      <li><a href="index.html"><span>00</span> Overview</a></li>
+      <li><a href="01-reading-and-planning-code.html" aria-current="page"><span>01</span> Reading and planning code</a></li>
+      <li><a href="02-symbols-and-punctuation.html"><span>02</span> Symbols and punctuation</a></li>
+      <li><a href="03-words.html"><span>03</span> Words</a></li>
+      <li><a href="04-values-and-conversion.html"><span>04</span> Values and conversion</a></li>
+      <li><a href="05-naming.html"><span>05</span> Naming</a></li>
+      <li><a href="06-decisions.html"><span>06</span> Decisions</a></li>
+      <li><a href="07-collections.html"><span>07</span> Collections</a></li>
+      <li><a href="08-loops.html"><span>08</span> Loops</a></li>
+      <li><a href="09-text-output.html"><span>09</span> Text output</a></li>
+      <li><a href="10-functions.html"><span>10</span> Functions</a></li>
+      <li><a href="11-decorators.html"><span>11</span> Decorators</a></li>
+    </ol>
+  </nav>
+  <div class="rail-note"><p><strong>A working reference.</strong></p><p>Open the chapter you are stuck in. Not written to be read cover to cover.</p><a class="rail-tidy" href="https://github.com/TidyWeb" target="_blank" rel="noopener"><img src="assets/tidyweb_logo_basalt_gold_transparent.png" alt=""><span><strong>TidyWeb</strong><small>View this project on GitHub</small></span></a></div>
+</aside>
+<main id="content">
+  <header class="hero">
+    <div><p class="eyebrow">Chapter 01</p><h1 class="intro-title"><span>Reading and planning code</span></h1><p class="lede">How to look at a problem before you write anything, and the one rule about the order code runs in.</p></div>
+    <div class="hero-index"><strong>01</strong><span>chapter</span></div>
+  </header>
+
+  <section class="lesson" id="seeing-the-shape-first">
+    <div class="lesson-head"><p class="lesson-no">01</p><div><p class="eyebrow">Reading and planning code</p><h2>Seeing the shape first</h2></div></div>
+    <p><strong>Losing the high-level shape inside unfamiliar syntax — and the fix.</strong></p>
+<p>The syntax of a new language (bracket types, comma placement, quote matching) is dense enough on its own that it's easy to lose the big-picture structure of what the code is actually <em>doing</em> while fighting the small-picture detail of how to <em>write</em> it correctly. Both are real skills but they're not the same skill, and trying to hold both in mind at once at speed is what causes the "can't see the wood for the trees" feeling.</p>
+<p>The fix that works: separate the two explicitly. Before writing any code, describe the structure in plain terms as nested containers — a big box, with a middle box inside it, with a small box inside that, and dividers inside the small box if needed. Get the shape right first, in words or a sketch, with no Python syntax at all. Only once the shape is settled, translate each box into its actual Python syntax one layer at a time. This maps directly onto the existing orange/outer, blue/middle, green/inner colour system already used in the notes for nested code — same idea, applied <em>before</em> code is written, not just after as a colour-coded explanation of code that already exists.</p>
+  </section>
+  <section class="lesson" id="top-to-bottom">
+    <div class="lesson-head"><p class="lesson-no">02</p><div><p class="eyebrow">Reading and planning code</p><h2>Top to bottom</h2></div></div>
+    <p><strong>Python runs top to bottom — a variable has to be created before the line that uses it.</strong></p>
+<p>Writing a calculation line before the <code>input()</code> line that fills the variable it depends on (e.g. <code>total_price = items * price_per_item</code> above an <code>items = int(input(...))</code> line that comes after it) fails, because at the moment the calculation runs, <code>items</code> doesn't exist yet. Order isn't cosmetic — it's the sequence Python actually executes in. The fix is always the same: the line that creates a variable has to appear above every line that uses it.</p>
+<p>Worth drilling deliberately, alongside the colon rule (block-openers only, never on a plain statement) — an exercise that tests both of these at once would be a useful thing to have.</p>
+<p><strong>What it looks like when it goes wrong.</strong></p>
+<div class="code-block"><code>total_price = items * price_per_item
+items = int(input("How many? "))</code></div>
+<div class="code-block code-block--out"><code>NameError: name 'items' is not defined</code></div>
+<p><code>NameError</code> almost always means one of two things, and they're worth telling apart because the fixes are different:</p>
+<ul><li><strong>The name is spelled differently somewhere.</strong> <code>items</code> vs <code>Items</code> vs <code>item</code>. Python is case-sensitive and does not guess.</li><li><strong>The name is defined, but <em>below</em> the line using it.</strong> Which is this case. The definition exists — it's just too late.</li></ul>
+<p>The diagnostic that separates them: search the file for the name. If it appears nowhere else, it's a typo. If it appears further down, it's an ordering problem.</p>
+<p><strong>The fix, and why it's not just "move the line up".</strong> Moving lines around until the error stops is guesswork. The reliable method is to read the line that failed and ask what it <em>needs</em>, then make sure every one of those things is created above it:</p>
+<div class="code-block"><code>items = int(input("How many? "))        <span class="code-comment"># needs: nothing</span>
+price_per_item = 2.50                   <span class="code-comment"># needs: nothing</span>
+total_price = items * price_per_item    <span class="code-comment"># needs: both of the above</span></code></div>
+<p>Written in dependency order, the file reads as a sequence where every line is already supplied with what it uses.</p>
+<p><strong>The one genuine exception, so it doesn't confuse you later.</strong> Function <em>bodies</em> don't follow this rule, because a body doesn't run when it's defined — it runs when it's called.</p>
+<div class="code-block"><code>def show_total():
+    print(total)      <span class="code-comment"># "total" doesn't exist yet — that's fine</span>
+
+total = 100
+show_total()          <span class="code-comment"># prints 100</span></code></div>
+<p>This works. By the time <code>show_total()</code> is actually called, <code>total</code> exists. The rule is really "created before the line that uses it <em>runs</em>" — which for ordinary top-level code is the same as "created above it", but for function bodies is not.</p>
+  </section>
+  <nav class="chapter-nav" aria-label="Previous and next chapter"><a class="chap-prev" href="index.html"><span>&#8592; Previous</span><strong>00 &middot; Overview</strong></a><a class="chap-next" href="02-symbols-and-punctuation.html"><span>Next &#8594;</span><strong>02 &middot; Symbols and punctuation</strong></a></nav>
+  <footer>
+    <p>Python Insights &mdash; a working reference. Chapter 01 of 11.</p>
+  </footer>
+</main>
+</body>
+</html>

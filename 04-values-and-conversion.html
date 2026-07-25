@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Values and conversion &middot; Python Insights</title>
+<link rel="stylesheet" href="assets/lesson-guide.css">
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<aside class="rail" aria-label="Guide navigation">
+  <div class="brand"><a class="brand-mark brand-home" href="index.html" aria-label="Back to the overview"><span aria-hidden="true">str</span></a><div><p class="eyebrow">Python insights</p><p class="brand-name">Values and conversion</p></div></div>
+  <nav class="section-nav" aria-label="On this page"><ol>
+    
+    <li><a href="#input-always-hands-back-text"><span>01</span> input() always hands back text</a></li><li><a href="#int-input-is-wrapping-not-sequence"><span>02</span> int(input()) is wrapping, not sequence</a></li><li><a href="#range-takes-integers-only"><span>03</span> range() takes integers only</a></li><li><a href="#truthiness"><span>04</span> Truthiness</a></li><li><a href="#len-depends-what-you-feed-it"><span>05</span> len() depends what you feed it</a></li><li><a href="#the-remainder"><span>06</span> % the remainder</a></li><li><a href="#is-still-an-assignment"><span>07</span> += is still an assignment</a></li>
+  </ol></nav>
+  <nav class="course-nav" aria-label="Chapters">
+    <p>Chapters</p>
+    <ol>
+      <li><a href="index.html"><span>00</span> Overview</a></li>
+      <li><a href="01-reading-and-planning-code.html"><span>01</span> Reading and planning code</a></li>
+      <li><a href="02-symbols-and-punctuation.html"><span>02</span> Symbols and punctuation</a></li>
+      <li><a href="03-words.html"><span>03</span> Words</a></li>
+      <li><a href="04-values-and-conversion.html" aria-current="page"><span>04</span> Values and conversion</a></li>
+      <li><a href="05-naming.html"><span>05</span> Naming</a></li>
+      <li><a href="06-decisions.html"><span>06</span> Decisions</a></li>
+      <li><a href="07-collections.html"><span>07</span> Collections</a></li>
+      <li><a href="08-loops.html"><span>08</span> Loops</a></li>
+      <li><a href="09-text-output.html"><span>09</span> Text output</a></li>
+      <li><a href="10-functions.html"><span>10</span> Functions</a></li>
+      <li><a href="11-decorators.html"><span>11</span> Decorators</a></li>
+    </ol>
+  </nav>
+  <div class="rail-note"><p><strong>A working reference.</strong></p><p>Open the chapter you are stuck in. Not written to be read cover to cover.</p><a class="rail-tidy" href="https://github.com/TidyWeb" target="_blank" rel="noopener"><img src="assets/tidyweb_logo_basalt_gold_transparent.png" alt=""><span><strong>TidyWeb</strong><small>View this project on GitHub</small></span></a></div>
+</aside>
+<main id="content">
+  <header class="hero">
+    <div><p class="eyebrow">Chapter 04</p><h1 class="intro-title"><span>Values and conversion</span></h1><p class="lede">What kind of thing a value is, and turning one kind into another.</p></div>
+    <div class="hero-index"><strong>04</strong><span>chapter</span></div>
+  </header>
+
+  <section class="lesson" id="input-always-hands-back-text">
+    <div class="lesson-head"><p class="lesson-no">01</p><div><p class="eyebrow">Values and conversion</p><h2>input() always hands back text</h2></div></div>
+    <p><strong><code>input()</code> always returns a string — always, no exceptions.</strong></p>
+<p>Even if someone types <code>25</code> or <code>y</code> or <code>100</code>, what lands in your variable is the <em>text</em> <code>"25"</code>, <code>"y"</code>, <code>"100"</code> — not a number, not a boolean. <code>input("Age: ") + 1</code> will error, not add 1 to their age, because you're trying to add a number to a string. Anything you want to treat as a number needs <code>int(...)</code> or <code>float(...)</code> wrapped around the input first; anything you want to treat as true/false needs a comparison (<code>== "y"</code>) to turn it into an actual boolean.</p>
+  </section>
+  <section class="lesson" id="int-input-is-wrapping-not-sequence">
+    <div class="lesson-head"><p class="lesson-no">02</p><div><p class="eyebrow">Values and conversion</p><h2>int(input()) is wrapping, not sequence</h2></div></div>
+    <p><strong><code>int(input(...))</code> — wrapping, not sequence.</strong></p>
+<p>The temptation when this won't recall is to think of <code>int</code> and <code>input</code> as steps in a left-to-right order — one before the other on the line. They're not sequential, they're <strong>nested</strong>: <code>input(...)</code> is the inner function, <code>int(...)</code> is the outer function wrapped around it.</p>
+<div class="code-block"><code>age = int(input("Enter your age: "))</code></div>
+<p>Read it from the inside out: <code>input("Enter your age: ")</code> runs first — it shows the prompt and waits, then hands back whatever the person typed, as a string. <code>int(...)</code> then wraps around that whole result and converts the string to a number. <code>age</code> catches whatever comes out of the outer layer last.</p>
+<p>Same shape as the outer/middle/inner box idea — <code>input</code> is the inner box doing the actual work of asking and catching a string; <code>int</code> is the outer box that takes what the inner box produced and converts it. Two functions, one open-bracket each, both closing brackets stacked at the end (<code>)</code> <code>)</code>) — miscounting those closing brackets is the most common way this line breaks.</p>
+  </section>
+  <section class="lesson" id="range-takes-integers-only">
+    <div class="lesson-head"><p class="lesson-no">03</p><div><p class="eyebrow">Values and conversion</p><h2>range() takes integers only</h2></div></div>
+    <p><strong><code>range()</code> requires an integer, not a float or anything else.</strong></p>
+<p><code>range(5)</code> works, <code>range(5.0)</code> doesn't — even though Python is generally relaxed about mixing ints and floats elsewhere (e.g. <code>5 * 1.5</code> works fine). <code>range()</code> is specifically strict about this. Whole numbers only, no exceptions, in every position:</p>
+<div class="code-block"><code>range(5)          <span class="code-comment"># fine</span>
+range(1, 6)       <span class="code-comment"># fine</span>
+range(1.5, 6)     <span class="code-comment"># TypeError</span></code></div>
+<div class="code-block code-block--out"><code>TypeError: 'float' object cannot be interpreted as an integer</code></div>
+<p><strong>Where this actually catches you.</strong> Rarely by typing <code>5.0</code> on purpose — almost always by feeding <code>range()</code> a variable that came from somewhere else and turned out to be a float:</p>
+<ul><li>straight from <code>input()</code> without conversion, or converted with <code>float()</code> instead of <code>int()</code></li><li>the result of a division, because <code>/</code> <em>always</em> produces a float in Python, even when it divides evenly: <code>10 / 2</code> is <code>5.0</code>, not <code>5</code></li></ul>
+<p>That second one is the sneaky one. <code>range(10 / 2)</code> errors, despite "five" being a perfectly good whole number, because the division handed back <code>5.0</code>.</p>
+<p><strong>The fix in both cases is the same</strong> — wrap it in <code>int()</code>:</p>
+<div class="code-block"><code>count = int(input("How many? "))    <span class="code-comment"># not float()</span>
+range(int(10 / 2))                  <span class="code-comment"># or use // instead</span></code></div>
+<p><code>//</code> is floor division, which produces an integer directly: <code>10 // 2</code> is <code>5</code>. If a division result is destined for <code>range()</code>, <code>//</code> saves you the conversion.</p>
+  </section>
+  <section class="lesson" id="truthiness">
+    <div class="lesson-head"><p class="lesson-no">04</p><div><p class="eyebrow">Values and conversion</p><h2>Truthiness</h2></div></div>
+    <p><strong>There's no <code>bool()</code> shortcut for qualifying a yes/no answer — the comparison itself IS the qualification.</strong></p>
+<p><code>int(...)</code> and <code>float(...)</code> genuinely convert text into a number of the same value — <code>"25"</code> becomes <code>25</code>. <code>bool(...)</code> doesn't work the same way: it never looks at <em>what's inside</em> the string, it only asks "is this string empty or not?" Any non-empty text — <code>"y"</code>, <code>"n"</code>, <code>"banana"</code> — is <code>True</code> under <code>bool()</code>. So there's no wrapping function that turns a yes/no answer into a usable true/false the way <code>int()</code> turns a number-string into a number.</p>
+<p>The real concept underneath this: before you can act on an answer, you have to state — explicitly, in the code — exactly what counts as a "yes." <code>is_adult == "y"</code> isn't just syntax, it's the moment the program commits to a definition of what a qualifying answer looks like. Skipping that and writing <code>if is_adult:</code> doesn't ask "did they say yes" — it only asks "did they type literally anything at all," which silently accepts every possible answer as if it qualified. This is worth remembering as a category, not just a fixed line of code: <strong>any time a question is being asked, decide and write down what a qualifying answer actually is, before doing anything with the response.</strong></p>
+<p><strong>What <code>if some_variable:</code> is actually asking.</strong>  It does not ask "did they say yes." It asks "is there anything in here at all."</p>
+<div class="code-block"><code>answer = input("Member? (y/n): ")
+
+if answer:              <span class="code-comment"># True for "y". Also True for "n".</span>
+    print("Member discount applied")</code></div>
+<p>Any non-empty string is truthy, so <code>"n"</code> passes this test just as happily as <code>"y"</code> — the person typed <em>something</em>, which is all the condition checks. The discount gets applied to everyone who doesn't just press Enter.</p>
+<p>The values that are <strong>falsy</strong> — the complete list worth knowing:</p>
+<div class="code-block"><code>""        <span class="code-comment"># empty string</span>
+0         <span class="code-comment"># zero, int or float</span>
+[]        <span class="code-comment"># empty list</span>
+{}        <span class="code-comment"># empty dict</span>
+None
+False</code></div>
+<p>Everything else is truthy. Note <code>"0"</code> and <code>"False"</code> are <em>strings</em>, and non-empty, so both are truthy — which is exactly the trap when they've come from <code>input()</code>.</p>
+<p><strong>The fix is always the same: state the comparison.</strong></p>
+<div class="code-block"><code>if answer == "y":       <span class="code-comment"># now it asks the actual question</span></code></div>
+<p><strong>Where truthiness IS the right tool.</strong> It isn't wrong everywhere — it's wrong for testing <em>what</em> someone typed. It's correct for testing whether a collection has anything in it:</p>
+<div class="code-block"><code>if bargain_shelf:               <span class="code-comment"># "did the loop find any?"</span>
+    print(bargain_shelf)
+else:
+    print("Nothing under £10")</code></div>
+<p>That reads well and is idiomatic Python. The distinction: truthiness answers "is there anything here?", never "is it this particular thing?"</p>
+<p><strong>Recurring trap.</strong> This surfaced across the membership gate, loyalty card and restaurant capstone drills — worth checking on every input-driven <code>if</code> from now on.</p>
+  </section>
+  <section class="lesson" id="len-depends-what-you-feed-it">
+    <div class="lesson-head"><p class="lesson-no">05</p><div><p class="eyebrow">Values and conversion</p><h2>len() depends what you feed it</h2></div></div>
+    <p><strong><code>len()</code> measures "how many items," but what counts as an item depends entirely on what's handed to it.</strong></p>
+<p>Same function, different behaviour depending on the input type: fed a list, it counts entries (<code>len(tools)</code> → how many tools). Fed a string, it counts characters, since a string is just a sequence of characters underneath (<code>len(tool)</code> where <code>tool</code> is one word → how many letters in that word). No separate function needed for each — <code>len()</code> always means "count what's inside," the type of what's inside decides what "inside" means.</p>
+  </section>
+  <section class="lesson" id="the-remainder">
+    <div class="lesson-head"><p class="lesson-no">06</p><div><p class="eyebrow">Values and conversion</p><h2>% the remainder</h2></div></div>
+    <p><strong><code>%</code> (modulo) gives the remainder after division — the standard way to test for even/odd, and divisibility generally.</strong></p>
+<p><code>number % 2</code> divides by 2 and returns whatever's left over — <code>0</code> if it divides evenly (even number), <code>1</code> if not (odd number). More generally, <code>x % y == 0</code> asks "does x divide evenly by y" — works for any divisor, not just 2 (e.g. <code>number % 3 == 0</code> tests divisibility by 3).</p>
+<p><strong>What it's actually doing</strong> — primary school long division, keeping the remainder and throwing the answer away:</p>
+<div class="code-block"><code>17 % 5      <span class="code-comment"># 5 goes into 17 three times, 2 left over  → 2</span>
+20 % 5      <span class="code-comment"># 5 goes into 20 four times, nothing over  → 0</span>
+3 % 5       <span class="code-comment"># 5 doesn't go into 3 at all, 3 left over  → 3</span></code></div>
+<p>That last one catches people: when the left number is <em>smaller</em> than the right, the whole thing is the remainder. Nothing was divided.</p>
+<p><code>%</code> is the twin of <code>//</code> (floor division), which keeps the answer and throws the remainder away. Between them they split a division in two:</p>
+<div class="code-block"><code>17 // 5     <span class="code-comment"># 3  — how many whole times</span>
+17 % 5      <span class="code-comment"># 2  — what's left over</span></code></div>
+<p><strong>Where you'll actually use it.</strong> Even/odd is the textbook example but the least useful in practice. The real jobs:</p>
+<p><strong>JOB ONE — do something every Nth time through a loop.</strong></p>
+<div class="code-block"><code>for i, order in enumerate(orders, start=1):
+    print(order)
+    if i % 10 == 0:               <span class="code-comment"># every 10th row</span>
+        print("--- page break ---")</code></div>
+<p>This is the one worth remembering. <code>i % 10 == 0</code> is true at 10, 20, 30 — the counter resets to zero every tenth pass, which is exactly "every tenth time" expressed as a condition.</p>
+<p><strong>JOB TWO — splitting a total into units and remainder.</strong></p>
+<div class="code-block"><code>total_minutes = 145
+hours = total_minutes // 60       <span class="code-comment"># 2</span>
+minutes = total_minutes % 60      <span class="code-comment"># 25</span>
+print(f"{hours}h {minutes}m")     <span class="code-comment"># 2h 25m</span></code></div>
+<p>Same shape for pence into pounds and pence, items into full boxes plus leftovers. Any time a quantity needs breaking into a bigger unit plus what's left, it's <code>//</code> and <code>%</code> as a pair.</p>
+<p><strong>JOB THREE — wrapping a number back around to a fixed range.</strong></p>
+<div class="code-block"><code>day_number % 7        <span class="code-comment"># always lands 0–6, whatever you feed it</span></code></div>
+<p>Useful for cycling through a list repeatedly without running off the end — the result can never exceed the divisor minus one.</p>
+<p><strong>JOB FOUR — alternating.</strong></p>
+<div class="code-block"><code>if i % 2 == 0:
+    row_colour = "grey"
+else:
+    row_colour = "white"</code></div>
+<p>Striped table rows, alternating anything. This is even/odd put to work.</p>
+<p><strong>The trap: <code>%</code> means something else entirely inside a string.</strong></p>
+<div class="code-block"><code>print(f"Discount: {rate}%")       <span class="code-comment"># just a percent sign, plain text</span>
+print(17 % 5)                     <span class="code-comment"># the operator, gives 2</span></code></div>
+<p>Inside a string it's a literal character. Outside, it's arithmetic. Same symbol, unrelated jobs — the same pattern as the brackets in Chapter 02, and worth filing alongside it.</p>
+<p><strong>Negative numbers behave unusually, if you ever meet one.</strong> <code>-1 % 5</code> gives <code>4</code> in Python, not <code>-1</code>. The result always takes the sign of the <em>right-hand</em> number, which is unusual among programming languages but is what makes the "wrapping" job above work cleanly. Not worth memorising — worth recognising if a result ever looks wrong.</p>
+  </section>
+  <section class="lesson" id="is-still-an-assignment">
+    <div class="lesson-head"><p class="lesson-no">07</p><div><p class="eyebrow">Values and conversion</p><h2>+= is still an assignment</h2></div></div>
+    <p><strong><code>+=</code> is shorthand for "take what's already there, add to it, and store the result back in the same variable."</strong></p>
+<p><code>total_revenue += fee</code> means exactly the same thing as <code>total_revenue = total_revenue + fee</code> — read the current value, add <code>fee</code> to it, save the result back into <code>total_revenue</code>. The shorthand form is just more compact; it doesn't skip any of those steps, it just avoids writing the variable's name twice on the same line. Same mechanism works for <code>-=</code>, <code>*=</code>, <code>/=</code> — each one means "current value, this operation, this amount, store it back."</p>
+<p><strong>Because it's an assignment, it counts as one everywhere.</strong> This is the part that catches people, and it is why the scope trap matters: <code>+=</code> does not <em>look</em> like an assignment, but it is one, so it triggers every rule that applies to assignments.</p>
+<ul><li>Inside a function, <code>total += x</code> makes <code>total</code> local for the whole function, exactly as <code>total = ...</code> would. See <strong>The scope trap</strong> in Chapter 10 (Functions).</li><li>The variable must already exist before you can <code>+=</code> to it, because the operation reads the current value first:</li></ul>
+<div class="code-block"><code>total += 5      <span class="code-comment"># NameError if total was never created</span></code></div>
+<div class="code-block code-block--out"><code>NameError: name 'total' is not defined</code></div>
+<p>This is the accumulator rule from the loop drills stated from the other direction — the reason you write <code>total = 0</code> before the loop isn't ceremony, it's that <code>+=</code> has nothing to read from otherwise.</p>
+  </section>
+  <nav class="chapter-nav" aria-label="Previous and next chapter"><a class="chap-prev" href="03-words.html"><span>&#8592; Previous</span><strong>03 &middot; Words</strong></a><a class="chap-next" href="05-naming.html"><span>Next &#8594;</span><strong>05 &middot; Naming</strong></a></nav>
+  <footer>
+    <p>Python Insights &mdash; a working reference. Chapter 04 of 11.</p>
+  </footer>
+</main>
+</body>
+</html>

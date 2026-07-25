@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Symbols and punctuation &middot; Python Insights</title>
+<link rel="stylesheet" href="assets/lesson-guide.css">
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<aside class="rail" aria-label="Guide navigation">
+  <div class="brand"><a class="brand-mark brand-home" href="index.html" aria-label="Back to the overview"><span aria-hidden="true">[{(</span></a><div><p class="eyebrow">Python insights</p><p class="brand-name">Symbols and punctuation</p></div></div>
+  <nav class="section-nav" aria-label="On this page"><ol>
+    
+    <li><a href="#brackets-one-symbol-three-jobs"><span>01</span> Brackets &mdash; one symbol, three jobs</a></li><li><a href="#does-double-duty"><span>02</span> [] does double duty</a></li><li><a href="#read-the-outermost-bracket"><span>03</span> Read the outermost bracket</a></li><li><a href="#colons-open-blocks"><span>04</span> Colons open blocks</a></li><li><a href="#nesting-quotes"><span>05</span> Nesting quotes</a></li><li><a href="#joining-text-and-values"><span>06</span> Joining text and values</a></li>
+  </ol></nav>
+  <nav class="course-nav" aria-label="Chapters">
+    <p>Chapters</p>
+    <ol>
+      <li><a href="index.html"><span>00</span> Overview</a></li>
+      <li><a href="01-reading-and-planning-code.html"><span>01</span> Reading and planning code</a></li>
+      <li><a href="02-symbols-and-punctuation.html" aria-current="page"><span>02</span> Symbols and punctuation</a></li>
+      <li><a href="03-words.html"><span>03</span> Words</a></li>
+      <li><a href="04-values-and-conversion.html"><span>04</span> Values and conversion</a></li>
+      <li><a href="05-naming.html"><span>05</span> Naming</a></li>
+      <li><a href="06-decisions.html"><span>06</span> Decisions</a></li>
+      <li><a href="07-collections.html"><span>07</span> Collections</a></li>
+      <li><a href="08-loops.html"><span>08</span> Loops</a></li>
+      <li><a href="09-text-output.html"><span>09</span> Text output</a></li>
+      <li><a href="10-functions.html"><span>10</span> Functions</a></li>
+      <li><a href="11-decorators.html"><span>11</span> Decorators</a></li>
+    </ol>
+  </nav>
+  <div class="rail-note"><p><strong>A working reference.</strong></p><p>Open the chapter you are stuck in. Not written to be read cover to cover.</p><a class="rail-tidy" href="https://github.com/TidyWeb" target="_blank" rel="noopener"><img src="assets/tidyweb_logo_basalt_gold_transparent.png" alt=""><span><strong>TidyWeb</strong><small>View this project on GitHub</small></span></a></div>
+</aside>
+<main id="content">
+  <header class="hero">
+    <div><p class="eyebrow">Chapter 02</p><h1 class="intro-title"><span>Symbols and punctuation</span></h1><p class="lede">The marks you type. Which bracket does what, where colons belong, and how quotes nest.</p></div>
+    <div class="hero-index"><strong>02</strong><span>chapter</span></div>
+  </header>
+
+  <section class="lesson" id="brackets-one-symbol-three-jobs">
+    <div class="lesson-head"><p class="lesson-no">01</p><div><p class="eyebrow">Symbols and punctuation</p><h2>Brackets &mdash; one symbol, three jobs</h2></div></div>
+    <p><strong>The same bracket symbol does different jobs depending on context.</strong></p>
+<ul><li><code>{}</code> — two unrelated jobs: building a dictionary (<code>{"regular": 2.50}</code>), or marking an insertion point inside an f-string (<code>f"{price}"</code>). Never both at once — whether it's Job 1 or Job 2 depends on whether it's sitting inside a string with an <code>f</code> in front of it.</li><li><code>[]</code> — three jobs: building a list (<code>[1, 2, 3]</code>), indexing/key lookup glued onto an existing variable (<code>menu["regular"]</code>, <code>tools[0]</code>), or slicing with a colon inside (<code>tools[0:2]</code>).</li><li><code>()</code> — three jobs: calling a function (<code>print(...)</code>), grouping in maths for order of operations (<code>(a + b) * c</code>), or building a <strong>tuple</strong> (<code>("Mon", "Tue")</code>) — a list that can't be changed after it's made.</li></ul>
+<p>The rule for telling them apart: look at what's directly to the left of the bracket, and whether it's inside a string. A bare bracket starting a new value is <em>creating</em> something; a bracket glued onto an existing name is <em>reaching into</em> something that already exists.</p>
+<p><strong>The single test that covers all three symbols.</strong> Ask: <em>is there a name glued to the left of this bracket, with no space?</em></p>
+<div class="code-block"><code>tools = ["hammer", "saw"]     <span class="code-comment"># nothing glued left of [  → building</span>
+tools[0]                      <span class="code-comment"># "tools" glued left of [ → reaching in</span>
+print("hello")                <span class="code-comment"># "print" glued left of ( → calling</span>
+(2 + 3) * 4                   <span class="code-comment"># nothing glued left of ( → grouping</span></code></div>
+<p>Glued to a name → you are <em>doing something to that name</em> (reaching in, or calling it). Standing alone → you are <em>making a new thing</em>. That one test resolves <code>[</code>, <code>(</code>, and <code>{</code> alike, which is why it's worth having as a single habit rather than three separate rules.</p>
+<p><strong>Why the same symbols got reused for different jobs.</strong> Not because Python is being awkward — because the language only has three bracket shapes on a standard keyboard and needed more than three jobs. There's no deeper logic connecting "build a list" to "look something up"; they share <code>[]</code> by necessity, not by meaning. Knowing that stops you hunting for a connection that isn't there.</p>
+  </section>
+  <section class="lesson" id="does-double-duty">
+    <div class="lesson-head"><p class="lesson-no">02</p><div><p class="eyebrow">Symbols and punctuation</p><h2>[] does double duty</h2></div></div>
+    <p><strong><code>[]</code> does double duty — it builds lists AND looks values up. <code>{}</code> only ever builds.</strong></p>
+<p>Square brackets are often taught as belonging to lists only, rather than as having two separate jobs. If that is how you first met them, this correction needs active repetition rather than a single reading.</p>
+<p><strong><code>{}</code> — one job only: building a dictionary from scratch.</strong> <code>staff = {"name": "Priya", "role": "manager"}</code> — declaring a new dictionary and its contents. <code>{}</code> never means "go look something up," in any context, regardless of what's nested around it.</p>
+<p><strong><code>[]</code> — two separate jobs, told apart by position:</strong></p>
+<ul><li><em>Building</em>, standing alone after <code>=</code>: <code>tools = ["hammer", "saw"]</code> — constructing a new list, same role <code>{}</code> plays for dictionaries.</li><li><em>Looking up</em>, sitting directly after something that already exists: <code>person["name"]</code>, <code>tools[1]</code>, <code>customers[0:2]</code> — reaching into something already built and pulling a piece back out.</li></ul>
+<p>The rule that matters for lookups: <strong>whenever you're retrieving a value from a dictionary — building it, target-selecting inside it, putting the reticle on it — the bracket is always <code>[]</code>, never <code>{}</code>, regardless of whether that dictionary sits alone or nested inside a list.</strong> The list wrapped around it changes nothing about this rule; it only adds one extra step beforehand (get to the right dictionary first), the lookup bracket itself never switches.</p>
+  </section>
+  <section class="lesson" id="read-the-outermost-bracket">
+    <div class="lesson-head"><p class="lesson-no">03</p><div><p class="eyebrow">Symbols and punctuation</p><h2>Read the outermost bracket</h2></div></div>
+    <p><strong>The outermost bracket tells you the container type — what's nested inside doesn't change it.</strong></p>
+<p><code>customers = [ {...}, {...}, {...} ]</code> is a <strong>list</strong> — signalled by the outer <code>[ ]</code> — that happens to contain dictionaries. Slicing it (<code>customers[0:2]</code>) always hands back another list, even though each item inside that list is itself a dictionary denoted by <code>{ }</code>. Don't let the bracket type of the <em>contents</em> override the bracket type of the <em>container</em> — read from the outside in to identify what you're actually holding, then look inside to see what it's made of.</p>
+  </section>
+  <section class="lesson" id="colons-open-blocks">
+    <div class="lesson-head"><p class="lesson-no">04</p><div><p class="eyebrow">Symbols and punctuation</p><h2>Colons open blocks</h2></div></div>
+    <p><strong>Colons only belong on lines that open a new indented block.</strong></p>
+<p><code>if</code>, <code>elif</code>, <code>else</code>, <code>for</code>, <code>while</code>, <code>def</code> — these all end their line with <code>:</code> because they're announcing "an indented block follows this line." A plain assignment (<code>final_price = discount</code>) is not opening a block, so it never takes a colon. If a colon shows up on a line that isn't one of those keyword lines, it's a stray character, not a rule being followed.</p>
+<p><strong>The complete list, so there's nothing to guess at.</strong> Only these open a block and therefore take a colon:</p>
+<p><code>if</code> · <code>elif</code> · <code>else</code> · <code>for</code> · <code>while</code> · <code>def</code> · <code>class</code> · <code>try</code> · <code>except</code> · <code>finally</code> · <code>with</code></p>
+<p>That's the whole set. Anything not on that list never takes one.</p>
+<p><strong>What it looks like when it goes wrong.</strong></p>
+<div class="code-block"><code>final_price = discount:</code></div>
+<div class="code-block code-block--out"><code>SyntaxError: invalid syntax</code></div>
+<p><code>SyntaxError</code> means Python couldn't even finish reading the file — so <strong>nothing runs at all</strong>, not one line, not even the correct lines above it. This is actually the friendly case: the error arrives before any work happens, and the line number it reports is the line with the stray colon on it. Go to that line, delete the colon, done.</p>
+<p><strong>The reverse mistake, which is easier to miss.</strong> Leaving a colon <em>off</em> a line that needs one:</p>
+<div class="code-block"><code>for tool in tools
+    print(tool)</code></div>
+<div class="code-block code-block--out"><code>SyntaxError: expected ':'</code></div>
+<p>Newer Python versions name the missing character outright. Older ones just say <code>invalid syntax</code> and point at the line — so if you get a bare <code>SyntaxError</code> on a <code>for</code>/<code>if</code>/<code>def</code> line and can't see anything wrong with it, the colon is the first thing to check.</p>
+<p><strong>Why the colon exists at all.</strong> It's the marker that says "the indented lines below are the body of this." Python needs both the colon and the indentation — the colon announces a block is coming, the indentation marks how far it extends. They're a pair; that's why a colon on a line with nothing indented beneath it is also an error.</p>
+  </section>
+  <section class="lesson" id="nesting-quotes">
+    <div class="lesson-head"><p class="lesson-no">05</p><div><p class="eyebrow">Symbols and punctuation</p><h2>Nesting quotes</h2></div></div>
+    <p><strong>Quote-nesting rule: whatever quote type opens a string, the next one of that same type closes it — no exceptions, no "it knows what I mean."</strong></p>
+<p>If an f-string opens with <code>"</code>, using <code>"</code> again for a dict key inside it (<code>f"{menu["large"]}"</code>) ends the string early at the first inner <code>"</code>, and everything after becomes broken code sitting outside any string. Fix: use the <em>other</em> quote type inside (<code>f"{menu['large']}"</code>). This isn't specific to f-strings — it's the same rule for any string containing a quote character, e.g. <code>"it's fine"</code> needs double quotes outside precisely because there's a single quote (apostrophe) inside.</p>
+  </section>
+  <section class="lesson" id="joining-text-and-values">
+    <div class="lesson-head"><p class="lesson-no">06</p><div><p class="eyebrow">Symbols and punctuation</p><h2>Joining text and values</h2></div></div>
+    <p><strong>You can't glue a value onto a string with brackets — that's a function call, not printing two things together.</strong></p>
+<div class="code-block"><code>print("Final price:"(final_price))   <span class="code-comment"># wrong — this errors</span></code></div>
+<p>Putting <code>(final_price)</code> directly after the string makes Python think you're trying to <em>call</em> the string itself, like calling a function — and strings aren't callable, so it errors. To show text and a value together, either separate them with a comma, or use an f-string:</p>
+<div class="code-block"><code>print("Final price:", final_price)
+print(f"Final price: {final_price}")</code></div>
+  </section>
+  <nav class="chapter-nav" aria-label="Previous and next chapter"><a class="chap-prev" href="01-reading-and-planning-code.html"><span>&#8592; Previous</span><strong>01 &middot; Reading and planning code</strong></a><a class="chap-next" href="03-words.html"><span>Next &#8594;</span><strong>03 &middot; Words</strong></a></nav>
+  <footer>
+    <p>Python Insights &mdash; a working reference. Chapter 02 of 11.</p>
+  </footer>
+</main>
+</body>
+</html>

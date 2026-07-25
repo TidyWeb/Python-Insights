@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Loops &middot; Python Insights</title>
+<link rel="stylesheet" href="assets/lesson-guide.css">
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<aside class="rail" aria-label="Guide navigation">
+  <div class="brand"><a class="brand-mark brand-home" href="index.html" aria-label="Back to the overview"><span aria-hidden="true">for &#8635;</span></a><div><p class="eyebrow">Python insights</p><p class="brand-name">Loops</p></div></div>
+  <nav class="section-nav" aria-label="On this page"><ol>
+    
+    <li><a href="#the-plural-name-is-finished-with"><span>01</span> The plural name is finished with</a></li><li><a href="#enumerate"><span>02</span> enumerate()</a></li>
+  </ol></nav>
+  <nav class="course-nav" aria-label="Chapters">
+    <p>Chapters</p>
+    <ol>
+      <li><a href="index.html"><span>00</span> Overview</a></li>
+      <li><a href="01-reading-and-planning-code.html"><span>01</span> Reading and planning code</a></li>
+      <li><a href="02-symbols-and-punctuation.html"><span>02</span> Symbols and punctuation</a></li>
+      <li><a href="03-words.html"><span>03</span> Words</a></li>
+      <li><a href="04-values-and-conversion.html"><span>04</span> Values and conversion</a></li>
+      <li><a href="05-naming.html"><span>05</span> Naming</a></li>
+      <li><a href="06-decisions.html"><span>06</span> Decisions</a></li>
+      <li><a href="07-collections.html"><span>07</span> Collections</a></li>
+      <li><a href="08-loops.html" aria-current="page"><span>08</span> Loops</a></li>
+      <li><a href="09-text-output.html"><span>09</span> Text output</a></li>
+      <li><a href="10-functions.html"><span>10</span> Functions</a></li>
+      <li><a href="11-decorators.html"><span>11</span> Decorators</a></li>
+    </ol>
+  </nav>
+  <div class="rail-note"><p><strong>A working reference.</strong></p><p>Open the chapter you are stuck in. Not written to be read cover to cover.</p><a class="rail-tidy" href="https://github.com/TidyWeb" target="_blank" rel="noopener"><img src="assets/tidyweb_logo_basalt_gold_transparent.png" alt=""><span><strong>TidyWeb</strong><small>View this project on GitHub</small></span></a></div>
+</aside>
+<main id="content">
+  <header class="hero">
+    <div><p class="eyebrow">Chapter 08</p><h1 class="intro-title"><span>Loops</span></h1><p class="lede">Repetition, the loop variable, and when a position number is actually needed.</p></div>
+    <div class="hero-index"><strong>08</strong><span>chapter</span></div>
+  </header>
+
+  <section class="lesson" id="the-plural-name-is-finished-with">
+    <div class="lesson-head"><p class="lesson-no">01</p><div><p class="eyebrow">Loops</p><h2>The plural name is finished with</h2></div></div>
+    <p><strong>FUNDAMENTAL RECURRING CONFUSION — reaching for the original collection name instead of the loop variable the <code>for</code> line just created.</strong></p>
+<p>The diagnosis: the instinct is to keep looking back at <code>staff</code> (the thing that "exists" up top) to find <code>name</code>, rather than recognising that <code>for person in staff:</code> already created a brand-new tool — <code>person</code> — that holds exactly one item, fresh, every pass. Once inside the loop, the loop variable (<code>person</code>, <code>order</code>, <code>member</code>, whatever it's called that pass) IS the thing to reach into for a key lookup — not the original list name. The original list (<code>staff</code>) doesn't need touching again inside the loop body at all; the loop already did that job. This is about trusting a freshly-created loop variable as the correct target, not just the singular/plural naming distinction. Watch for this resurfacing across any new loop context, not just dictionaries.</p>
+<p><strong>The tell, and the fix.</strong> The symptom is always the same shape: a line inside a loop body that mentions the <em>plural</em> name.</p>
+<div class="code-block"><code>for person in staff:
+    print(staff["name"])     <span class="code-comment"># wrong — reaching past the loop variable</span>
+    print(person["name"])    <span class="code-comment"># right — reaching into this pass's item</span></code></div>
+<p>The first line errors, because <code>staff</code> is a list and <code>"name"</code> is not a valid list index. That error message — a list being asked for a string key — is the reliable signature of this exact mistake, so it is worth recognising on sight rather than reading as a mystery.</p>
+<p>The habit that prevents it: <strong>once you write the <code>for</code> line, the plural name is finished with.</strong> It did its job by handing you the loop variable. Inside the loop body, if you find yourself typing the plural, stop — you almost certainly want the singular.</p>
+<p>Naming the loop variable well makes this self-policing. <code>for person in staff:</code> makes the wrong line look obviously wrong. <code>for s in staff:</code> does not, which is one practical argument for spelling loop variables out in full.</p>
+  </section>
+  <section class="lesson" id="enumerate">
+    <div class="lesson-head"><p class="lesson-no">02</p><div><p class="eyebrow">Loops</p><h2>enumerate()</h2></div></div>
+    <p><strong><code>enumerate()</code> attaches a running position number to each item as it goes — it manufactures that number rather than finding it in the data.</strong></p>
+<p><strong>What it does.</strong> <code>enumerate()</code> walks a collection and hands back each item with a running position number attached. It <strong>manufactures</strong> that pairing — the number does not come from inside the data, it is generated by <code>enumerate</code> as it counts along.</p>
+<div class="code-block"><code>for i, tool in enumerate(["hammer", "saw"]):
+    print(i, tool)</code></div>
+<div class="code-block code-block--out"><code>0 hammer
+1 saw</code></div>
+<p><strong>When to use it — the trigger.</strong> A plain loop (<code>for day in days:</code>) already gives you each value in turn. <code>enumerate</code> earns its place only when the position number is about to be <em>used for something</em>, and in practice that means one thing: reaching into a <strong>second list</strong> at the same position.</p>
+<div class="code-block"><code>for index, day in enumerate(days):
+    print(day, movies[index])     <span class="code-comment"># index used to reach into movies</span></code></div>
+<p>That's the entire justification — cross-referencing two lists kept in sync by position. The rule:</p>
+<p><strong>Need the position number for a lookup elsewhere → <code>enumerate</code>. Just need each value → plain loop.</strong></p>
+<p>Reaching for it out of habit on every loop misses that trigger. In that same example, the inner loop <code>for movie in movies[index]:</code> does <em>not</em> use <code>enumerate</code>, and shouldn't — there's no second list to cross-reference, so the movie's value is all that's needed.</p>
+<p><strong>It always hands back exactly two things, and always in the same order: (position, item).</strong> Not three, not a configurable number — two.</p>
+<div class="code-block"><code>for i, order in enumerate(orders):     <span class="code-comment"># as far as this line can go</span></code></div>
+<p>You cannot add more names to that unpacking to also catch fields from inside <code>order</code>. Those fields aren't siblings produced by <code>enumerate</code> — they're keys sitting inside the dictionary <code>order</code> already holds. Pulling them out is a separate step on its own line inside the loop body, using ordinary dictionary lookup:</p>
+<div class="code-block"><code>for i, order in enumerate(orders):
+    print(i, order["type"], order["size"])    <span class="code-comment"># lookups, not unpacking</span></code></div>
+<p><strong>The "pair" coincidence — worth being explicit about.</strong> A dictionary has key:value pairs. <code>enumerate</code> produces pairs. These are unrelated ideas that share a word.</p>
+<p><code>enumerate</code> doesn't need what you feed it to be "in pairs" already, and it never looks inside the items to extract anything. It works identically on a plain list of strings:</p>
+<div class="code-block"><code>enumerate(["Alice", "Ben"])     <span class="code-comment"># gives (0, "Alice"), (1, "Ben")</span></code></div>
+<p>When <code>members</code> is a list of dictionaries, <code>enumerate</code> is pairing each <em>whole dictionary</em> with its position in the list — it is not reaching inside them for key:value pairs.</p>
+<p><strong>Naming and the <code>start</code> argument.</strong> <code>i</code> is the conventional name for the position number — not enforced by Python, but what you'll see everywhere, so worth recognising on sight. Counting begins at 0 by default; <code>start=1</code> shifts it for human-facing output:</p>
+<div class="code-block"><code>for i, tool in enumerate(tools, start=1):
+    print(f"{i}. {tool}")        <span class="code-comment"># 1. hammer  2. saw</span></code></div>
+<p>Output shaped like "1. hammer, 2. saw" is the signal that <code>start=1</code> is wanted.</p>
+<p>&mdash;-</p>
+<p><strong>RELATED BUT SEPARATE — the box/shelf model for nested loops.</strong></p>
+<p>This isn't about <code>enumerate</code>; it's the mechanical picture underneath a nested loop, kept here because it belongs with the same idea.</p>
+<p>One shelf, three boxes labelled Friday/Saturday/Sunday, cassettes inside each. Pull a box down, take the cassettes out one at a time until it's empty — however many happen to be inside, the inner loop never needs to know the count in advance — then put the empty box back and move to the next box along.</p>
+<p>The thing worth holding onto: <strong>in the code, the label and the contents are not fused</strong> the way they are in that mental image. They're two separate lists (<code>days</code> and <code>movies</code>) that only line up because they sit at matching positions. Nothing in Python ties "Friday" to that specific set of films except that both happen to be at index 0 in their own list. <code>index</code> is the stand-in for "these two are the same box" — it is the only thing enforcing the pairing. If the two lists ever fell out of sync, the labels would point at the wrong contents, because nothing else connects them.</p>
+  </section>
+  <nav class="chapter-nav" aria-label="Previous and next chapter"><a class="chap-prev" href="07-collections.html"><span>&#8592; Previous</span><strong>07 &middot; Collections</strong></a><a class="chap-next" href="09-text-output.html"><span>Next &#8594;</span><strong>09 &middot; Text output</strong></a></nav>
+  <footer>
+    <p>Python Insights &mdash; a working reference. Chapter 08 of 11.</p>
+  </footer>
+</main>
+</body>
+</html>

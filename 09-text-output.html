@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Text output &middot; Python Insights</title>
+<link rel="stylesheet" href="assets/lesson-guide.css">
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<aside class="rail" aria-label="Guide navigation">
+  <div class="brand"><a class="brand-mark brand-home" href="index.html" aria-label="Back to the overview"><span aria-hidden="true">f" "</span></a><div><p class="eyebrow">Python insights</p><p class="brand-name">Text output</p></div></div>
+  <nav class="section-nav" aria-label="On this page"><ol>
+    <li><a href="#why-f-strings"><span>00</span> Why f-strings are worth the attention</a></li>
+    <li><a href="#format-specifiers"><span>01</span> Format specifiers</a></li><li><a href="#f-strings-pull-from-any-source"><span>02</span> F-strings pull from any source</a></li>
+  </ol></nav>
+  <nav class="course-nav" aria-label="Chapters">
+    <p>Chapters</p>
+    <ol>
+      <li><a href="index.html"><span>00</span> Overview</a></li>
+      <li><a href="01-reading-and-planning-code.html"><span>01</span> Reading and planning code</a></li>
+      <li><a href="02-symbols-and-punctuation.html"><span>02</span> Symbols and punctuation</a></li>
+      <li><a href="03-words.html"><span>03</span> Words</a></li>
+      <li><a href="04-values-and-conversion.html"><span>04</span> Values and conversion</a></li>
+      <li><a href="05-naming.html"><span>05</span> Naming</a></li>
+      <li><a href="06-decisions.html"><span>06</span> Decisions</a></li>
+      <li><a href="07-collections.html"><span>07</span> Collections</a></li>
+      <li><a href="08-loops.html"><span>08</span> Loops</a></li>
+      <li><a href="09-text-output.html" aria-current="page"><span>09</span> Text output</a></li>
+      <li><a href="10-functions.html"><span>10</span> Functions</a></li>
+      <li><a href="11-decorators.html"><span>11</span> Decorators</a></li>
+    </ol>
+  </nav>
+  <div class="rail-note"><p><strong>A working reference.</strong></p><p>Open the chapter you are stuck in. Not written to be read cover to cover.</p><a class="rail-tidy" href="https://github.com/TidyWeb" target="_blank" rel="noopener"><img src="assets/tidyweb_logo_basalt_gold_transparent.png" alt=""><span><strong>TidyWeb</strong><small>View this project on GitHub</small></span></a></div>
+</aside>
+<main id="content">
+  <header class="hero">
+    <div><p class="eyebrow">Chapter 09</p><h1 class="intro-title"><span>Text output</span></h1><p class="lede">F-strings &mdash; pulling values into a sentence and controlling how they look.</p></div>
+    <div class="hero-index"><strong>09</strong><span>chapter</span></div>
+  </header>
+
+  <section class="lesson" id="why-f-strings">
+    <div class="lesson-head"><p class="lesson-no">00</p><div><p class="eyebrow">Text output</p><h2>Why f-strings are worth the attention</h2></div></div>
+    
+    <p class="thesis">Of everything in this reference, this is the chapter I would ask you to read even if you came here for something else.</p>
+
+    <div class="author-note future-note">
+      <p>F-strings are the one that opened the door for me. They were the first place where the whole boxes-inside-boxes idea stopped being an abstraction and became something I could watch happening on a single line &mdash; and once it did, a good deal of the rest of Python stopped feeling like a pile of unrelated rules and started looking like one idea repeated.</p>
+      <p>I had been treating string formatting as a cosmetic thing, a way of tidying up output. It is not. It is the same reaching-into-containers action as everything else, just done somewhere you can see it clearly.</p>
+    </div>
+
+    <h3>What an f-string actually is</h3>
+    <p>Put an <code>f</code> immediately before a string and Python will treat any curly braces inside it as live instructions rather than as ordinary characters.</p>
+
+    <div class="code-block"><code>name = "Ravi"
+
+print(f"Good morning {name}")</code></div>
+    <div class="code-block code-block--out"><code>Good morning Ravi</code></div>
+
+    <p>Without the <code>f</code>, that line prints the word <code>{name}</code> exactly as typed, braces and all. The <code>f</code> is what makes the braces mean something.</p>
+
+    <h3>A box with windows cut into it</h3>
+    <p>Picture an f-string as <strong>a box with windows cut into it</strong>. The ordinary text is the box. Each <code>{}</code> is a window. Through each window you reach into some <em>other</em> box and pull out whatever is inside, and what you pulled out appears in the gap.</p>
+
+    <p>The sentence stays fixed. The values arriving through the windows change on every run.</p>
+
+    <h3>The realisation &mdash; what goes in the braces is not new syntax</h3>
+    <p>This is the part that unlocked it. Whatever you would write on its own line to get at a value is <em>exactly</em> what goes inside the braces. Nothing is added. Nothing is special.</p>
+
+    <div class="code-block"><code>member = {"name": "Ravi", "orders": 3}
+
+<span class="code-comment"># the long way - reach out here, then print</span>
+found = member["name"]
+print(found)
+
+<span class="code-comment"># the same reach, done inside the window instead</span>
+print(f"{member['name']}")</code></div>
+    <div class="code-block code-block--out"><code>Ravi
+Ravi</code></div>
+
+    <p>Both print the same thing. The second is not a shortcut with its own rules &mdash; it is the identical lookup, relocated inside the braces. The braces move <em>where</em> the reaching happens. They do not change <em>how</em> it works.</p>
+
+    <div class="callout callout--amber"><p><strong>Why this matters beyond formatting.</strong> Every f-string you write is one more repetition of <em>reach into a container and pull a value out</em> &mdash; the same action used by list indexing, dictionary lookup, slicing and function calls. The container changes. The action never does. That is why practising f-strings quietly teaches you everything else.</p></div>
+
+    <p>The two entries below are the practical consequences: how to control the way a value looks once it arrives, and the proof that every possible source behaves identically.</p>
+
+  </section>
+  <section class="lesson" id="format-specifiers">
+    <div class="lesson-head"><p class="lesson-no">01</p><div><p class="eyebrow">Text output</p><h2>Format specifiers</h2></div></div>
+    <p><strong>A format specifier like <code>.2f</code> goes inside the same curly braces as the variable it's formatting — never outside them.</strong></p>
+<p>Inside an f-string, <code>{}</code> is one self-contained instruction: variable name, then a colon, then the formatting code, all sealed inside that one pair of braces. It only affects what is inside that specific pair; plain text sitting outside the braces is untouched.</p>
+<p><strong>The anatomy of one pair of braces.</strong></p>
+<div class="code-block"><code>total = 3.4
+
+print(f"That will be £{total:.2f} please")</code></div>
+<div class="code-block code-block--out"><code>That will be £3.40 please</code></div>
+<p>Reading the braces from the inside out:</p>
+<ul><li><code>total</code> — the thing to fetch</li><li><code>:</code> — the divider. Everything left of it is <em>what</em>, everything right is <em>how it should look</em></li><li><code>.2f</code> — show it as a decimal number to two places</li></ul>
+<p>The <code>£</code> and the word <code>please</code> sit outside the braces, so <code>.2f</code> has no effect on them whatsoever. Without the specifier you would get <code>£3.4</code> — correct arithmetically, wrong for money.</p>
+<p><strong>The specifiers worth knowing.</strong> There are many; these four cover almost everything you will need.</p>
+<div class="code-block"><code>value = 1234.5678
+rate  = 0.075
+
+print(f"{value:.2f}")      <span class="code-comment"># 1234.57      two decimal places</span>
+print(f"{value:,.2f}")     <span class="code-comment"># 1,234.57     thousands separator too</span>
+print(f"{rate:.0%}")       <span class="code-comment"># 8%           as a percentage</span>
+print(f"{value:&gt;12.2f}")   <span class="code-comment">#      1234.57 right-aligned in 12 spaces</span></code></div>
+<p>That last one is how you line figures up in a column when printing a table.</p>
+<p><strong>The trap: breaking the string in half.</strong></p>
+<p>An f-string is one continuous piece of text from its opening quote to its closing quote. The braces go <em>inside</em> that unbroken string. A common first attempt closes the string early:</p>
+<div class="code-block"><code>print(f"£ "{total} " Delivery is free")</code></div>
+<div class="code-block code-block--out"><code>SyntaxError: invalid syntax</code></div>
+<p>Read what those quotes actually do. The first <code>"</code> opens a string and the second <code>"</code> closes it — so <code>{total}</code> is now sitting outside any string at all, and then a third <code>"</code> opens a new one. Three fragments where there should be one.</p>
+<p>The fix is to leave the string whole and let the braces do the work from inside it:</p>
+<div class="code-block"><code>print(f"£{total:.2f} Delivery is free")</code></div>
+<div class="code-block code-block--out"><code>£3.40 Delivery is free</code></div>
+<p><strong>The habit that prevents it.</strong> Write the sentence first, in full, as ordinary text. Then go back and replace the changeable parts with braces. That way the string is never broken open, because you never had two of them.</p>
+  </section>
+  <section class="lesson" id="f-strings-pull-from-any-source">
+    <div class="lesson-head"><p class="lesson-no">02</p><div><p class="eyebrow">Text output</p><h2>F-strings pull from any source</h2></div></div>
+    <p><strong>F-strings pull from any source the same way — loop variable, dictionary lookup, or an enumerate pair — same <code>{}</code> mechanism every time.</strong></p>
+<p><strong>The claim, and the proof.</strong></p>
+<p>If the braces really are just a relocated lookup — as the opening of this chapter argues — then it should not matter <em>what</em> you put in them. Anything that produces a value should work, with no extra rules to learn for each kind.</p>
+<p>That is exactly what happens. Here are six completely different sources in one block:</p>
+<div class="code-block"><code>tools = ["hammer", "saw"]
+member = {"name": "Ravi", "orders": 3}
+price = 3.4
+
+for i, tool in enumerate(tools, start=1):
+    print(f"{i}. {tool}")              <span class="code-comment"># 1. hammer</span>
+
+print(f"{member['name']}")             <span class="code-comment"># Ravi          dict lookup</span>
+print(f"{member['orders'] * 2}")       <span class="code-comment"># 6             a calculation</span>
+print(f"{member['name'].upper()}")     <span class="code-comment"># RAVI          a method</span>
+print(f"{len(tools)}")                 <span class="code-comment"># 2             a function</span>
+print(f"{price:.2f}")                  <span class="code-comment"># 3.40          with formatting</span></code></div>
+<p>Six different sources, one mechanism. Evaluate whatever expression sits in the braces, drop the answer into the sentence.</p>
+<p><strong>The quote trap, which follows directly from this.</strong></p>
+<p>Because the braces contain real code, a dictionary lookup inside them needs its own quotes — and those cannot be the same quotes holding the string together, or the string ends early.</p>
+<div class="code-block"><code>print(f"{member["name"]}")     <span class="code-comment"># breaks - the string closes at "name</span>
+print(f"{member['name']}")     <span class="code-comment"># works  - single quotes inside double</span></code></div>
+<p>Double quotes outside, single quotes inside. This is the same nesting rule as brackets, applied to quotation marks.</p>
+<p><strong>What to take from this.</strong> There is no list of "things you are allowed to put in an f-string" to memorise, and never was. If it produces a value, it goes in the braces. That is the whole rule, and it is why this is one of the few corners of Python where you can stop checking and simply write what you mean.</p>
+  </section>
+  <nav class="chapter-nav" aria-label="Previous and next chapter"><a class="chap-prev" href="08-loops.html"><span>&#8592; Previous</span><strong>08 &middot; Loops</strong></a><a class="chap-next" href="10-functions.html"><span>Next &#8594;</span><strong>10 &middot; Functions</strong></a></nav>
+  <footer>
+    <p>Python Insights &mdash; a working reference. Chapter 09 of 11.</p>
+  </footer>
+</main>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Decisions &middot; Python Insights</title>
+<link rel="stylesheet" href="assets/lesson-guide.css">
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<aside class="rail" aria-label="Guide navigation">
+  <div class="brand"><a class="brand-mark brand-home" href="index.html" aria-label="Back to the overview"><span aria-hidden="true">if ?</span></a><div><p class="eyebrow">Python insights</p><p class="brand-name">Decisions</p></div></div>
+  <nav class="section-nav" aria-label="On this page"><ol>
+    
+    <li><a href="#where-elif-sits"><span>01</span> Where elif sits</a></li><li><a href="#flipping-a-comparison"><span>02</span> Flipping a comparison</a></li>
+  </ol></nav>
+  <nav class="course-nav" aria-label="Chapters">
+    <p>Chapters</p>
+    <ol>
+      <li><a href="index.html"><span>00</span> Overview</a></li>
+      <li><a href="01-reading-and-planning-code.html"><span>01</span> Reading and planning code</a></li>
+      <li><a href="02-symbols-and-punctuation.html"><span>02</span> Symbols and punctuation</a></li>
+      <li><a href="03-words.html"><span>03</span> Words</a></li>
+      <li><a href="04-values-and-conversion.html"><span>04</span> Values and conversion</a></li>
+      <li><a href="05-naming.html"><span>05</span> Naming</a></li>
+      <li><a href="06-decisions.html" aria-current="page"><span>06</span> Decisions</a></li>
+      <li><a href="07-collections.html"><span>07</span> Collections</a></li>
+      <li><a href="08-loops.html"><span>08</span> Loops</a></li>
+      <li><a href="09-text-output.html"><span>09</span> Text output</a></li>
+      <li><a href="10-functions.html"><span>10</span> Functions</a></li>
+      <li><a href="11-decorators.html"><span>11</span> Decorators</a></li>
+    </ol>
+  </nav>
+  <div class="rail-note"><p><strong>A working reference.</strong></p><p>Open the chapter you are stuck in. Not written to be read cover to cover.</p><a class="rail-tidy" href="https://github.com/TidyWeb" target="_blank" rel="noopener"><img src="assets/tidyweb_logo_basalt_gold_transparent.png" alt=""><span><strong>TidyWeb</strong><small>View this project on GitHub</small></span></a></div>
+</aside>
+<main id="content">
+  <header class="hero">
+    <div><p class="eyebrow">Chapter 06</p><h1 class="intro-title"><span>Decisions</span></h1><p class="lede">Choosing between paths &mdash; how branches line up, and what happens when you flip one.</p></div>
+    <div class="hero-index"><strong>06</strong><span>chapter</span></div>
+  </header>
+
+  <section class="lesson" id="where-elif-sits">
+    <div class="lesson-head"><p class="lesson-no">01</p><div><p class="eyebrow">Decisions</p><h2>Where elif sits</h2></div></div>
+    <p><strong><code>elif</code> sits at the <em>same</em> indentation level as the <code>if</code> it belongs to — never nested one level inside it.</strong></p>
+<div class="code-block"><code>if coffee_type == "regular":
+    ...
+elif coffee_type == "special":   <span class="code-comment"># same indent as the `if` above</span>
+    ...</code></div>
+<p><code>if</code>/<code>elif</code>/<code>else</code> are read by Python as one single decision block — they have to line up vertically. Indenting <code>elif</code> further in makes Python think it belongs to whatever inner block sits above it instead, which breaks the logic silently rather than throwing an obvious error every time.</p>
+  </section>
+  <section class="lesson" id="flipping-a-comparison">
+    <div class="lesson-head"><p class="lesson-no">02</p><div><p class="eyebrow">Decisions</p><h2>Flipping a comparison</h2></div></div>
+    <p><strong>Flipping the comparison and flipping the branches cancels out — two "opposite-looking" conditions can be the exact same rule.</strong></p>
+<p><code>if how_many &lt; 20: charge / else: free</code> and <code>if how_many &gt;= 20: free / else: charge</code> are not two different rules — they're the same rule written from two different starting points. <code>&lt;</code> and <code>&gt;=</code> are logical opposites of each other, and <code>if</code>/<code>else</code> are also opposites of each other; flip both at once and the meaning is preserved exactly. Getting a nagging feeling that <code>&lt;</code> "should" be <code>&gt;</code> after the code already produces the right answer is usually this — not a real error, just the same logic looked at from the other side.</p>
+<p><strong>The check that settles it, instead of doubting from memory:</strong> take the actual example values from the spec and trace them through the line exactly as written — don't reason about what the operator "should" be in the abstract. If <code>how_many = 25</code> produces "free" and <code>how_many = 4</code> produces "charge," and those match what the spec asked for, the code is correct, full stop — regardless of which operator or which branch felt right on first read. This is a reliable way to settle self-doubt about boundary conditions (<code>&lt;</code> vs <code>&lt;=</code> vs <code>&gt;</code> vs <code>&gt;=</code>) without having to re-derive the logic from scratch every time.</p>
+  </section>
+  <nav class="chapter-nav" aria-label="Previous and next chapter"><a class="chap-prev" href="05-naming.html"><span>&#8592; Previous</span><strong>05 &middot; Naming</strong></a><a class="chap-next" href="07-collections.html"><span>Next &#8594;</span><strong>07 &middot; Collections</strong></a></nav>
+  <footer>
+    <p>Python Insights &mdash; a working reference. Chapter 06 of 11.</p>
+  </footer>
+</main>
+</body>
+</html>

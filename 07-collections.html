@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Collections &middot; Python Insights</title>
+<link rel="stylesheet" href="assets/lesson-guide.css">
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<aside class="rail" aria-label="Guide navigation">
+  <div class="brand"><a class="brand-mark brand-home" href="index.html" aria-label="Back to the overview"><span aria-hidden="true">[ : ]</span></a><div><p class="eyebrow">Python insights</p><p class="brand-name">Collections</p></div></div>
+  <nav class="section-nav" aria-label="On this page"><ol>
+    
+    <li><a href="#chained-lookups-resolve-inside-out"><span>01</span> Chained lookups resolve inside-out</a></li><li><a href="#the-positional-slot-rule"><span>02</span> The positional slot rule</a></li><li><a href="#the-stop-number-is-exclusive"><span>03</span> The stop number is exclusive</a></li><li><a href="#counting-from-the-right"><span>04</span> Counting from the right</a></li>
+  </ol></nav>
+  <nav class="course-nav" aria-label="Chapters">
+    <p>Chapters</p>
+    <ol>
+      <li><a href="index.html"><span>00</span> Overview</a></li>
+      <li><a href="01-reading-and-planning-code.html"><span>01</span> Reading and planning code</a></li>
+      <li><a href="02-symbols-and-punctuation.html"><span>02</span> Symbols and punctuation</a></li>
+      <li><a href="03-words.html"><span>03</span> Words</a></li>
+      <li><a href="04-values-and-conversion.html"><span>04</span> Values and conversion</a></li>
+      <li><a href="05-naming.html"><span>05</span> Naming</a></li>
+      <li><a href="06-decisions.html"><span>06</span> Decisions</a></li>
+      <li><a href="07-collections.html" aria-current="page"><span>07</span> Collections</a></li>
+      <li><a href="08-loops.html"><span>08</span> Loops</a></li>
+      <li><a href="09-text-output.html"><span>09</span> Text output</a></li>
+      <li><a href="10-functions.html"><span>10</span> Functions</a></li>
+      <li><a href="11-decorators.html"><span>11</span> Decorators</a></li>
+    </ol>
+  </nav>
+  <div class="rail-note"><p><strong>A working reference.</strong></p><p>Open the chapter you are stuck in. Not written to be read cover to cover.</p><a class="rail-tidy" href="https://github.com/TidyWeb" target="_blank" rel="noopener"><img src="assets/tidyweb_logo_basalt_gold_transparent.png" alt=""><span><strong>TidyWeb</strong><small>View this project on GitHub</small></span></a></div>
+</aside>
+<main id="content">
+  <header class="hero">
+    <div><p class="eyebrow">Chapter 07</p><h1 class="intro-title"><span>Collections</span></h1><p class="lede">Reaching into a container, by name or by position, and taking slices out of it.</p></div>
+    <div class="hero-index"><strong>07</strong><span>chapter</span></div>
+  </header>
+
+  <section class="lesson" id="chained-lookups-resolve-inside-out">
+    <div class="lesson-head"><p class="lesson-no">01</p><div><p class="eyebrow">Collections</p><h2>Chained lookups resolve inside-out</h2></div></div>
+    <p><strong>Chained lookups resolve inside-out, and that's what lets one variable do the work of several.</strong></p>
+<p><code>fee = membership_fees[member["tier"]]</code> looks like one flat line, but Python resolves the innermost bracket first: <code>member["tier"]</code> runs, produces a plain string (<code>"premium"</code>), and only then does that result get used as the key for the outer lookup on <code>membership_fees</code>. The inner result never gets its own named variable — it exists just long enough to feed the next bracket out, then it's gone. Without this inside-out resolution, the same job would need a separate line and a separate throwaway variable for every layer (<code>tier = member["tier"]</code>, then <code>fee = membership_fees[tier]</code>) — the chained version collapses that into one line by letting each bracket's result become the next bracket's input directly. <code>fee</code> ends up holding a real number, not any of the intermediate text it passed through to get there.</p>
+  </section>
+  <section class="lesson" id="the-positional-slot-rule">
+    <div class="lesson-head"><p class="lesson-no">02</p><div><p class="eyebrow">Collections</p><h2>The positional slot rule</h2></div></div>
+    <p><strong>The positional slot rule — re-addressing beats "staying inside."</strong></p>
+<p>When pulling several values out of the same dictionary sitting inside a list, there's no way to look something up once and then keep asking follow-up questions about it. Every single value needs the full path spelled out again from scratch:</p>
+<div class="code-block"><code>menu[5]["name"]
+menu[5]["price"]</code></div>
+<p>Not <code>menu[5]</code> once and then <code>["name"]</code> and <code>["price"]</code> off the back of it as if Python remembers where you just were — it doesn't. Python has no concept of "still being inside" a lookup after the line finishes running. Each line is a fresh instruction, read fully, top to bottom, every time. It feels wrong because in spoken English, once you've said "the fifth item," you can just say "its name" and "its price" without repeating yourself — English carries context forward, Python doesn't.</p>
+<p><strong>The remedy: park the lookup in a variable, then reach into that.</strong></p>
+<p>You cannot make Python remember where you were — but you can hand the place you were to a variable, and that variable <em>does</em> persist across lines. This is the cure, and it is the thing that was missing from this note originally:</p>
+<div class="code-block"><code>item = menu[5]          <span class="code-comment"># do the positional step ONCE</span>
+print(item["name"])     <span class="code-comment"># now reach into the parked thing</span>
+print(item["price"])</code></div>
+<p><code>item</code> now holds the actual dictionary sitting at position 5. Every line after that reaches into <code>item</code> directly, and the <code>[5]</code> never needs writing again. Two lookups become one lookup plus two cheap reaches.</p>
+<p>This is the same manoeuvre as English carrying context forward — you just have to do it explicitly, by naming the thing, instead of expecting Python to infer it.</p>
+<p><strong>In a loop, the loop variable does this job for you already.</strong></p>
+<div class="code-block"><code>for item in menu:
+    print(item["name"], item["price"])</code></div>
+<p>There is no positional step at all here. <code>for item in menu:</code> hands you one dictionary per pass, already parked in <code>item</code> — so the "address it fully every time" problem disappears entirely. This is worth noticing, because it means the re-addressing burden is mostly a symptom of reaching into a list <em>by number</em> rather than looping over it. If you find yourself writing <code>menu[5]["name"]</code> and <code>menu[5]["price"]</code> and <code>menu[5]["size"]</code> on three consecutive lines, that is the signal to either park it in a variable or use a loop.</p>
+<p><strong>When you genuinely do need the full path.</strong> Writing it out in full is correct and normal for a <em>single</em> one-off lookup — <code>print(menu[5]["name"])</code> on its own needs no variable. The parking manoeuvre earns its place from the second lookup onward, not the first.</p>
+  </section>
+  <section class="lesson" id="the-stop-number-is-exclusive">
+    <div class="lesson-head"><p class="lesson-no">03</p><div><p class="eyebrow">Collections</p><h2>The stop number is exclusive</h2></div></div>
+    <p><strong>The stop number in a slice is exclusive — it marks where slicing stops, not the last item included.</strong></p>
+<p><code>orders[0:3]</code> reads as "start at index 0, keep going, stop the moment you reach index 3" — so index 3 itself is never included, only 0, 1, and 2. To get the first three items, the stop number has to be one higher than the last index you actually want (three items → stop at 3, not 2). One way to frame it: the stop number acts like a buffer, stopping one short of itself.</p>
+<p><strong>The arithmetic that settles it every time.</strong> Rather than counting items on your fingers, subtract:</p>
+<p><strong>stop − start = how many items you get.</strong></p>
+<div class="code-block"><code>orders[0:3]     <span class="code-comment"># 3 − 0 = 3 items</span>
+orders[2:5]     <span class="code-comment"># 5 − 2 = 3 items</span>
+orders[1:2]     <span class="code-comment"># 2 − 1 = 1 item</span>
+orders[4:4]     <span class="code-comment"># 4 − 4 = 0 items — an empty list, not an error</span></code></div>
+<p>This works for any slice, always, and it's faster than reasoning about which index is or isn't included. If you want three items and the subtraction doesn't give you three, the numbers are wrong before you've run anything.</p>
+<p><strong>Why Python chose it this way</strong> — it's not arbitrary, and knowing the reason makes it stick. Two properties fall out of exclusive stops that would otherwise be fiddly:</p>
+<div class="code-block"><code>tools[:2] + tools[2:]     <span class="code-comment"># == tools, exactly, no overlap, no gap</span></code></div>
+<p>Splitting a list at any point needs only <em>one</em> number, used as both the stop of the first half and the start of the second. If stops were inclusive you'd need <code>[:2]</code> and <code>[3:]</code> and would have to remember the +1 every time.</p>
+<p><strong>The fence-post picture, if the arithmetic doesn't land.</strong> Think of the index numbers as sitting <em>between</em> the items rather than on them:</p>
+<div class="code-block code-block--out"><code>     0     1     2     3
+     |  a  |  b  |  c  |</code></div>
+<p><code>[0:3]</code> means "cut at 0, cut at 3, take what's between" → <code>a b c</code>. Read this way the stop isn't excluding anything; it's just where the second cut goes. This is why <code>[4:4]</code> gives nothing — both cuts land in the same place.</p>
+<p><strong>The most common real error.</strong> Wanting "the first three" and writing the last index you want rather than the stop:</p>
+<div class="code-block"><code>first_three = orders[0:2]     <span class="code-comment"># wrong — gives 2 items</span>
+first_three = orders[0:3]     <span class="code-comment"># right — 3 − 0 = 3</span></code></div>
+<p>And a shorthand worth knowing: a blank start means "from the beginning", so <code>orders[:3]</code> is the same thing, with one less number to get wrong.</p>
+  </section>
+  <section class="lesson" id="counting-from-the-right">
+    <div class="lesson-head"><p class="lesson-no">04</p><div><p class="eyebrow">Collections</p><h2>Counting from the right</h2></div></div>
+    <p><strong>Negative slice indices still read left to right in list position — they just count from the right-hand end instead of the left — and the stop is still exclusive.</strong></p>
+<p><code>-2</code> sits to the left of <code>-1</code> in actual list order (second-to-last, then last), so <code>start:stop</code> direction still holds the normal way. The trap: leaving the stop blank (<code>orders[-2:]</code>) means "go all the way to the end," but writing the stop as <code>-1</code> (<code>orders[-2:-1]</code>) means "stop just before the last item" — which excludes the last item entirely. To grab the final two items of a list, the stop has to be left blank, not written as <code>-1</code>.</p>
+<p><strong>Both numbering systems, side by side.</strong> Every position has two valid names, and they refer to the same slot:</p>
+<div class="code-block code-block--out"><code>  list:    a     b     c     d     e
+  from L:  0     1     2     3     4
+  from R: -5    -4    -3    -2    -1</code></div>
+<p>So <code>tools[-1]</code> and <code>tools[4]</code> are the same item here. Negative indices exist for one reason: <strong>you can reach the end without knowing the length.</strong> <code>tools[-1]</code> is always the last item, whether the list has five entries or five hundred.</p>
+<p><strong>Why there's no <code>-0</code>.</strong> Zero already means "the first item", and <code>-0</code> is just <code>0</code> in arithmetic, so it can't also mean "the last". That's why counting from the right starts at <code>-1</code> rather than <code>-0</code> — it isn't an inconsistency, it's the only number left. This is also the root of the <code>-1</code> trap below.</p>
+<p><strong>The trap in full.</strong> As a <em>start</em>, <code>-1</code> means the last item. As a <em>stop</em>, <code>-1</code> means stop before the last item. Same number, opposite practical effect, because stops are still exclusive:</p>
+<div class="code-block"><code>orders = ["a", "b", "c", "d", "e"]
+
+orders[-1]        <span class="code-comment"># "e"                 — as an index</span>
+orders[-2:]       <span class="code-comment"># ["d", "e"]          — last two, correct</span>
+orders[-2:-1]     <span class="code-comment"># ["d"]               — the trap, loses "e"</span>
+orders[:-1]       <span class="code-comment"># ["a","b","c","d"]   — everything except the last</span></code></div>
+<p><strong>The recipes, so you don't have to re-derive them.</strong></p>
+<div class="code-block"><code>items[-1]         <span class="code-comment"># last item</span>
+items[-2]         <span class="code-comment"># second to last</span>
+items[-3:]        <span class="code-comment"># last three</span>
+items[:-1]        <span class="code-comment"># everything except the last</span>
+items[1:-1]       <span class="code-comment"># everything except first and last</span></code></div>
+<p>The pattern: <strong>to include the end, leave the stop blank. To exclude something from the end, put a negative number in the stop.</strong></p>
+<p><strong>The one rule that carries over unchanged from the previous entry.</strong> The subtraction still works, once you convert to positive indices — but easier is simply this: <em>if you want the slice to run to the end of the list, the stop must be empty.</em> No number, negative or positive, will include the final item, because stops are always exclusive.</p>
+<p><strong>Mixing the two systems is legal.</strong> <code>orders[1:-1]</code> is fine — positive start, negative stop. Python doesn't mind; each number is resolved independently before the slice runs.</p>
+  </section>
+  <nav class="chapter-nav" aria-label="Previous and next chapter"><a class="chap-prev" href="06-decisions.html"><span>&#8592; Previous</span><strong>06 &middot; Decisions</strong></a><a class="chap-next" href="08-loops.html"><span>Next &#8594;</span><strong>08 &middot; Loops</strong></a></nav>
+  <footer>
+    <p>Python Insights &mdash; a working reference. Chapter 07 of 11.</p>
+  </footer>
+</main>
+</body>
+</html>

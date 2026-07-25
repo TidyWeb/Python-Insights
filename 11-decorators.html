@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Decorators &middot; Python Insights</title>
+<link rel="stylesheet" href="assets/lesson-guide.css">
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<aside class="rail" aria-label="Guide navigation">
+  <div class="brand"><a class="brand-mark brand-home" href="index.html" aria-label="Back to the overview"><span aria-hidden="true">@</span></a><div><p class="eyebrow">Python insights</p><p class="brand-name">Decorators</p></div></div>
+  <nav class="section-nav" aria-label="On this page"><ol>
+    
+    <li><a href="#the-parcel-analogy"><span>01</span> The parcel analogy</a></li><li><a href="#why-they-feel-backwards"><span>02</span> Why they feel backwards</a></li>
+  </ol></nav>
+  <nav class="course-nav" aria-label="Chapters">
+    <p>Chapters</p>
+    <ol>
+      <li><a href="index.html"><span>00</span> Overview</a></li>
+      <li><a href="01-reading-and-planning-code.html"><span>01</span> Reading and planning code</a></li>
+      <li><a href="02-symbols-and-punctuation.html"><span>02</span> Symbols and punctuation</a></li>
+      <li><a href="03-words.html"><span>03</span> Words</a></li>
+      <li><a href="04-values-and-conversion.html"><span>04</span> Values and conversion</a></li>
+      <li><a href="05-naming.html"><span>05</span> Naming</a></li>
+      <li><a href="06-decisions.html"><span>06</span> Decisions</a></li>
+      <li><a href="07-collections.html"><span>07</span> Collections</a></li>
+      <li><a href="08-loops.html"><span>08</span> Loops</a></li>
+      <li><a href="09-text-output.html"><span>09</span> Text output</a></li>
+      <li><a href="10-functions.html"><span>10</span> Functions</a></li>
+      <li><a href="11-decorators.html" aria-current="page"><span>11</span> Decorators</a></li>
+    </ol>
+  </nav>
+  <div class="rail-note"><p><strong>A working reference.</strong></p><p>Open the chapter you are stuck in. Not written to be read cover to cover.</p><a class="rail-tidy" href="https://github.com/TidyWeb" target="_blank" rel="noopener"><img src="assets/tidyweb_logo_basalt_gold_transparent.png" alt=""><span><strong>TidyWeb</strong><small>View this project on GitHub</small></span></a></div>
+</aside>
+<main id="content">
+  <header class="hero">
+    <div><p class="eyebrow">Chapter 11</p><h1 class="intro-title"><span>Decorators</span></h1><p class="lede">Functions that wrap other functions, and the one place execution order stops being top-to-bottom.</p></div>
+    <div class="hero-index"><strong>11</strong><span>chapter</span></div>
+  </header>
+
+  <section class="lesson" id="the-parcel-analogy">
+    <div class="lesson-head"><p class="lesson-no">01</p><div><p class="eyebrow">Decorators</p><h2>The parcel analogy</h2></div></div>
+    <p><strong>DECORATORS — the parcel analogy (preferred over any plumbing/pipe framing).</strong></p>
+<p>A decorator is a box that receives another function as an unopened parcel, builds a new box around it, and hands the new box back — under the <em>original</em> function's name.</p>
+<ul><li><code>def add_lights(func):</code> — <code>func</code> is just a parameter name, like any other (<code>item_name</code>, <code>spell_name</code>) — not a keyword, arbitrary label. It's the inbox slot this box uses for incoming parcels.</li><li><code>@add_lights</code> above <code>def decorate_tree():</code> triggers, behind the scenes: the whole <code>decorate_tree</code> parcel — unopened, contents untouched — gets posted into <code>add_lights</code>, landing in the <code>func</code> slot.</li><li>Inside <code>add_lights</code>, a new box <code>wrapper</code> is built <em>around</em> that parcel. <code>wrapper</code> can see <code>func</code> because it's nested inside <code>add_lights</code> (same reachability rule as any nested scope). <code>wrapper</code>'s job: print something, <strong>open the <code>func</code> parcel</strong> (<code>func()</code> — the brackets mean "open this parcel and let its contents run"), print something else.</li><li><code>add_lights</code> returns <code>wrapper</code> itself — unopened, not yet run — and the name <code>decorate_tree</code> gets quietly repointed to this new <code>wrapper</code> box instead of the original plain parcel.</li><li>So <code>decorate_tree()</code> at the bottom no longer opens the original parcel directly — it opens <code>wrapper</code>, which opens the original parcel <em>through</em> <code>func()</code> partway through its own instructions.</li></ul>
+  </section>
+  <section class="lesson" id="why-they-feel-backwards">
+    <div class="lesson-head"><p class="lesson-no">02</p><div><p class="eyebrow">Decorators</p><h2>Why they feel backwards</h2></div></div>
+    <p><strong>WHY DECORATORS FEEL BACKWARDS — execution order isn't top-to-bottom reading order.</strong></p>
+<p>Normal reading (left to right, top to bottom) doesn't match how a decorated function actually executes. The <code>@decorator</code> line sits <em>above</em> the function it modifies, but its effect (swapping the name to point at <code>wrapper</code>) only takes hold once the whole definition is processed — and the actual sequence of what prints, in what order, depends on lines written last (<code>func()</code>, buried inside <code>wrapper</code>, itself defined inside <code>add_lights</code>, defined <em>before</em> <code>decorate_tree</code> even exists) reaching back to affect something that appears later in the file. Spotting this takes deliberately tracing the <em>call order</em> separately from the <em>reading order</em> — the two aren't the same thing here, unlike straightforward top-to-bottom code.</p>
+<p>Reassurance: indentation and block structure still work exactly as normal throughout all of this — <code>add_lights</code>, <code>wrapper</code>, and <code>decorate_tree</code> are each still clearly delimited by indentation, same rules as ever. It's specifically <em>execution order</em> that stops matching <em>read order</em>, not the structural rules already relied on. A bare <code>some_function()</code> sitting on its own line, anywhere, is always a live instruction to run that function now — not just a label or a reference — worth remembering, since that's what made <code>decorate_tree()</code> at the bottom easy to misread as inert.</p>
+<p><strong>THE TRACE — the remedy for the backwards feeling.</strong></p>
+<p>Describing the mechanism isn't enough to stop it feeling wrong. The thing that fixes it is doing this trace once, slowly, on paper. Here is the whole program, with every line numbered:</p>
+<div class="code-block"><code>1   def add_lights(func):
+2       def wrapper():
+3           print("Untangling the lights")
+4           func()
+5           print("Switching them on")
+6       return wrapper
+7
+8   @add_lights
+9   def decorate_tree():
+10      print("Hanging the baubles")
+11
+12  decorate_tree()</code></div>
+<p>Output:</p>
+<div class="code-block code-block--out"><code>Untangling the lights
+Hanging the baubles
+Switching them on</code></div>
+<p><strong>Now the order Python actually runs those lines in:</strong></p>
+<p>1. Line 1 — Python reads <code>def add_lights</code>. It does <strong>not</strong> run the body. It just learns the recipe and moves on. 2. Line 8–9 — Python reads <code>def decorate_tree</code> and learns that recipe too. Still nothing has run. 3. Line 8 — the <code>@add_lights</code> line now fires. This is the moment the swap happens. Python calls <code>add_lights(decorate_tree)</code>, passing the original function in as the parcel. 4. Inside <code>add_lights</code>, line 2 defines <code>wrapper</code> — again, learns the recipe, doesn't run it. Line 6 returns <code>wrapper</code> back out. 5. The name <code>decorate_tree</code> is now quietly repointed at <code>wrapper</code>. <strong>The original function still exists</strong>, but only <code>wrapper</code> knows how to reach it, through the <code>func</code> slot. 6. Line 12 — <code>decorate_tree()</code> runs. But <code>decorate_tree</code> is now <code>wrapper</code>, so this runs <code>wrapper</code>'s body. 7. Line 3 prints "Untangling the lights". 8. Line 4 — <code>func()</code> opens the original parcel. Line 10 prints "Hanging the baubles". 9. Line 5 prints "Switching them on".</p>
+<p><strong>Where the backwards feeling actually comes from.</strong> Steps 1 to 5 all happen <em>before any output appears at all</em>. Everything above line 12 is Python quietly rearranging who points at what — no printing, no visible activity. Then line 12 fires and all three prints happen in a burst, in an order determined by code written <em>above</em> the thing that triggered it.</p>
+<p>So the read order and the run order genuinely are different, and you weren't imagining it. The fix isn't to make it feel top-to-bottom again — it's to read a decorated function in <strong>two passes</strong>:</p>
+<ul><li><strong>Pass one — setup.</strong> Ignore all bodies. Just ask: which name ends up pointing at which function? (Answer here: <code>decorate_tree</code> now points at <code>wrapper</code>.)</li><li><strong>Pass two — execution.</strong> Start at the call at the bottom, and follow only the name you established in pass one. Read <code>wrapper</code>'s body top to bottom as ordinary code, and treat <code>func()</code> as "the original function runs here."</li></ul>
+<p>Pass two <em>is</em> top-to-bottom, ordinary, and unsurprising. All the strangeness lives in pass one, and pass one produces exactly one fact: a name got repointed. Separate those two passes and the mind- flip stops.</p>
+<p><strong>The single sentence to hold onto.</strong> <code>@decorator</code> does not change the function — it replaces the <em>name</em> with a new function that has the original one tucked inside it.</p>
+  </section>
+  <nav class="chapter-nav" aria-label="Previous and next chapter"><a class="chap-prev" href="10-functions.html"><span>&#8592; Previous</span><strong>10 &middot; Functions</strong></a><a class="chap-next" href="index.html"><span>Next &#8594;</span><strong>00 &middot; Back to overview</strong></a></nav>
+  <footer>
+    <p>Python Insights &mdash; a working reference. Chapter 11 of 11.</p>
+  </footer>
+</main>
+</body>
+</html>

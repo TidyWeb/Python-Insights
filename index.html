@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="An overview of what Python actually consists of, and a working reference to the things that catch people out.">
+<title>Python Insights &middot; Overview</title>
+<link rel="stylesheet" href="assets/lesson-guide.css">
+</head>
+<body>
+<a class="skip" href="#content">Skip to the overview</a>
+<aside class="rail" aria-label="Guide navigation">
+  <div class="brand"><span class="brand-mark" aria-hidden="true">&#9656;</span><div><p class="eyebrow">Python &middot; working reference</p><p class="brand-name">Python Insights</p></div></div>
+  <nav class="section-nav" aria-label="Sections on this page"><ol>
+    <li><a href="#legend"><span>01</span> Symbol legend</a></li>
+    <li><a href="#four"><span>02</span> What a program does</a></li>
+    <li><a href="#boxes"><span>03</span> Boxes inside boxes</a></li>
+    <li><a href="#vocabulary"><span>04</span> The vocabulary map</a></li>
+    <li><a href="#expressions"><span>05</span> Expressions and statements</a></li>
+    <li><a href="#errors"><span>06</span> The three kinds of error</a></li>
+    <li><a href="#stuck"><span>07</span> I&rsquo;m stuck on&hellip;</a></li>
+    <li><a href="#chapters"><span>08</span> The eleven chapters</a></li>
+  </ol></nav>
+  <nav class="course-nav" aria-label="Chapters">
+    <p>Chapters</p>
+    <ol>
+      <li><a href="index.html" aria-current="page"><span>00</span> Overview</a></li>
+      <li><a href="01-reading-and-planning-code.html"><span>01</span> Reading and planning code</a></li>
+      <li><a href="02-symbols-and-punctuation.html"><span>02</span> Symbols and punctuation</a></li>
+      <li><a href="03-words.html"><span>03</span> Words</a></li>
+      <li><a href="04-values-and-conversion.html"><span>04</span> Values and conversion</a></li>
+      <li><a href="05-naming.html"><span>05</span> Naming</a></li>
+      <li><a href="06-decisions.html"><span>06</span> Decisions</a></li>
+      <li><a href="07-collections.html"><span>07</span> Collections</a></li>
+      <li><a href="08-loops.html"><span>08</span> Loops</a></li>
+      <li><a href="09-text-output.html"><span>09</span> Text output</a></li>
+      <li><a href="10-functions.html"><span>10</span> Functions</a></li>
+      <li><a href="11-decorators.html"><span>11</span> Decorators</a></li>
+    </ol>
+  </nav>
+  <div class="rail-note">
+    <p><strong>Start here.</strong></p>
+    <p>This page is the map. The chapters are for when you are stuck on something specific.</p>
+    <a class="rail-tidy" href="https://github.com/TidyWeb" target="_blank" rel="noopener"><img src="assets/tidyweb_logo_basalt_gold_transparent.png" alt=""><span><strong>TidyWeb</strong><small>View this project on GitHub</small></span></a>
+  </div>
+</aside>
+
+<main id="content">
+  <header class="hero">
+    <div>
+      <p class="eyebrow">Python &middot; the whole shape</p>
+      <h1 class="intro-title"><span>Four things.</span><em>That is all it does.</em></h1>
+      <p class="lede">Python is taught as a pile of separate topics with names nobody explains &mdash; syntax, control flow, iteration, scope. Underneath, a program only ever does four things. This page names the territory properly, so the rest has somewhere to sit.</p>
+    </div>
+    <div class="hero-index"><strong>00</strong><span>start here</span></div>
+  </header>
+
+  <section class="lesson lesson-note" id="why">
+    <div class="future-note author-note">
+      <p class="card-label">A note on where this came from</p>
+      <p>I put this together from notes I was taking as I went, while struggling to work out how Python was actually structured and what the concepts underneath it were.</p>
+      <p>Nearly every tutorial I found dived headfirst into syntax &mdash; the ubiquitous <em>hello world</em> &mdash; and that was no good to me. I needed to understand things from a higher level first: what the pieces are, what they are called, and how they relate to one another. Without that, the individual lessons had nothing to attach themselves to and slid straight back out again.</p>
+      <p>So I wrote the thing I wanted to have been given. I hope it helps you as much as it has helped me.</p>
+    </div>
+  </section>
+
+  <section class="lesson" id="legend">
+    <div class="lesson-head"><p class="lesson-no">01</p><div><p class="eyebrow">Recognise the destination</p><h2>Symbol legend</h2></div></div>
+    <p class="thesis">Each chapter is marked by the symbol that most belongs to it. When you are hunting for something, the symbol is usually quicker than the title.</p>
+    <div class="symbol-strip-wrap" role="region" aria-label="Eleven chapter symbols in reading order. Scroll sideways on narrow screens." tabindex="0">
+      <div class="symbol-strip">
+        <a class="symbol-link" href="01-reading-and-planning-code.html"><span class="brand-mark" aria-hidden="true">&#9656;</span><strong>Reading &amp; planning</strong></a>
+        <a class="symbol-link" href="02-symbols-and-punctuation.html"><span class="brand-mark" aria-hidden="true">[{(</span><strong>Symbols</strong></a>
+        <a class="symbol-link" href="03-words.html"><span class="brand-mark" aria-hidden="true">def</span><strong>Words</strong></a>
+        <a class="symbol-link" href="04-values-and-conversion.html"><span class="brand-mark" aria-hidden="true">str</span><strong>Values</strong></a>
+        <a class="symbol-link" href="05-naming.html"><span class="brand-mark" aria-hidden="true">x =</span><strong>Naming</strong></a>
+        <a class="symbol-link" href="06-decisions.html"><span class="brand-mark" aria-hidden="true">if ?</span><strong>Decisions</strong></a>
+        <a class="symbol-link" href="07-collections.html"><span class="brand-mark" aria-hidden="true">[ : ]</span><strong>Collections</strong></a>
+        <a class="symbol-link" href="08-loops.html"><span class="brand-mark" aria-hidden="true">&#8635;</span><strong>Loops</strong></a>
+        <a class="symbol-link" href="09-text-output.html"><span class="brand-mark" aria-hidden="true">f" "</span><strong>Text output</strong></a>
+        <a class="symbol-link" href="10-functions.html"><span class="brand-mark" aria-hidden="true">( )&#8594;</span><strong>Functions</strong></a>
+        <a class="symbol-link" href="11-decorators.html"><span class="brand-mark" aria-hidden="true">@</span><strong>Decorators</strong></a>
+      </div>
+    </div>
+    <p class="scroll-note">On a narrow screen, scroll the strip sideways.</p>
+  </section>
+
+  <section class="lesson lesson-introduction" id="four">
+    <div class="lesson-head"><p class="lesson-no">02</p><div><p class="eyebrow">The whole language, briefly</p><h2>What a program actually does</h2></div></div>
+    <p class="thesis">Every program ever written does some combination of four things. Every topic on any Python course is a detail of one of these. If a lesson ever feels unmoored, the useful question is: which of the four is this about?</p>
+    <div class="shape-summary-grid" aria-label="The four things a program does">
+      <article class="shape-summary">
+        <h3 class="shape-name">Hold</h3>
+        <p>Keep a value somewhere so you can use it later &mdash; one value, or a whole collection of them.</p>
+        <p><small>Proper names: <strong>variables</strong>, <strong>data types</strong>, <strong>data structures</strong>.</small></p>
+      </article>
+      <article class="shape-summary">
+        <h3 class="shape-name">Decide</h3>
+        <p>Look at something and choose a path. Do this, or that, or the other, depending on what is true.</p>
+        <p><small>Proper names: <strong>conditionals</strong>, <strong>branching</strong>, <strong>control flow</strong>.</small></p>
+      </article>
+      <article class="shape-summary">
+        <h3 class="shape-name">Repeat</h3>
+        <p>Do the same job once for each of many things, or keep going until something tells you to stop.</p>
+        <p><small>Proper names: <strong>iteration</strong>, <strong>loops</strong>.</small></p>
+      </article>
+      <article class="shape-summary">
+        <h3 class="shape-name">Package</h3>
+        <p>Write a set of steps once, give it a name, and use it whenever you need it.</p>
+        <p><small>Proper names: <strong>functions</strong>, <strong>parameters</strong>, <strong>scope</strong>.</small></p>
+      </article>
+    </div>
+    <p class="shape-summary-close">Everything else &mdash; slicing, f-strings, decorators, modules &mdash; is a refinement of one of those four. Nothing is a fifth thing.</p>
+    <div class="callout"><p><strong>Why this is worth holding onto.</strong> Courses tend to teach the four in order and then never name them again, so it stops being obvious that a lesson on dictionaries and a lesson on lists are the same idea wearing different clothes. They are both <em>Hold</em>.</p></div>
+  </section>
+
+  <section class="lesson" id="boxes">
+    <div class="lesson-head"><p class="lesson-no">03</p><div><p class="eyebrow">The one idea underneath all of it</p><h2>Boxes inside boxes</h2></div></div>
+
+    <p class="thesis">Python spends its entire life doing two things: <strong>putting things inside other things</strong>, and <strong>reaching back in to pull them out again</strong>. Almost every difficulty in the language is one of those two operations wearing a disguise.</p>
+
+    <p>This is worth meeting early, because once you see it you stop learning a dozen unrelated topics and start recognising the same shape in new clothes. A list holds dictionaries. A dictionary holds values. An <code>if</code> block holds the lines that belong to it. A function holds its own private variables. A decorator holds an entire function inside another one. Same idea, five times over.</p>
+
+    <h3>Putting in &mdash; the nesting</h3>
+    <p>A parcel can hold smaller parcels, which hold smaller ones still. Python has no limit on how deep this goes, and no rule that things at the same level must match.</p>
+
+    <p>Here is a coffee shop menu. It is <strong>one list</strong>, and inside that list sit <strong>three dictionaries</strong> &mdash; one per drink. Each dictionary holds <strong>three labelled values</strong>: a name, a price, and whether the drink is served hot. This is the code that builds it.</p>
+
+    <div class="code-block"><code>menu = [
+    {"name": "Latte",    "price": 3.10, "hot": True},
+    {"name": "Mocha",    "price": 3.40, "hot": True},
+    {"name": "Iced tea", "price": 2.60, "hot": False}
+]</code></div>
+
+    <p>Notice the two bracket types doing different jobs. The outer <code>[</code> and <code>]</code> build the list. The inner <code>{</code> and <code>}</code> build each dictionary. Drawn as boxes, that same code looks like this.</p>
+
+    <div class="box-figure">
+    <svg viewBox="0 0 740 290" role="img" aria-label="A large box labelled menu, a list, containing three medium boxes each a dictionary, each of which contains three labelled value slips.">
+      <rect x="8" y="30" width="724" height="248" rx="4" fill="var(--panel)" stroke="var(--green)" stroke-width="2.5"/>
+      <rect x="22" y="10" width="150" height="30" rx="3" fill="var(--green)"/>
+      <text x="34" y="30" font-family="var(--mono)" font-size="14" font-weight="700" fill="var(--panel)">menu &mdash; a list</text>
+
+      <g>
+        <rect x="34" y="70" width="215" height="188" rx="3" fill="var(--mint)" stroke="var(--green)" stroke-width="1.5" stroke-dasharray="5 4"/>
+        <text x="46" y="94" font-family="var(--mono)" font-size="12" font-weight="700" fill="var(--green)">[0] a dictionary</text>
+        <rect x="46" y="106" width="190" height="34" rx="2" fill="#fff" stroke="var(--line)"/>
+        <text x="58" y="128" font-family="var(--mono)" font-size="12.5" fill="var(--ink)">"name" : "Latte"</text>
+        <rect x="46" y="148" width="190" height="34" rx="2" fill="#fff" stroke="var(--line)"/>
+        <text x="58" y="170" font-family="var(--mono)" font-size="12.5" fill="var(--ink)">"price" : 3.10</text>
+        <rect x="46" y="190" width="190" height="34" rx="2" fill="#fff" stroke="var(--line)"/>
+        <text x="58" y="212" font-family="var(--mono)" font-size="12.5" fill="var(--ink)">"hot" : True</text>
+      </g>
+
+      <g>
+        <rect x="263" y="70" width="215" height="188" rx="3" fill="var(--mint)" stroke="var(--green)" stroke-width="1.5" stroke-dasharray="5 4"/>
+        <text x="275" y="94" font-family="var(--mono)" font-size="12" font-weight="700" fill="var(--green)">[1] a dictionary</text>
+        <rect x="275" y="106" width="190" height="34" rx="2" fill="#fff" stroke="var(--line)"/>
+        <text x="287" y="128" font-family="var(--mono)" font-size="12.5" fill="var(--ink)">"name" : "Mocha"</text>
+        <rect x="275" y="148" width="190" height="34" rx="2" fill="#fff" stroke="var(--line)"/>
+        <text x="287" y="170" font-family="var(--mono)" font-size="12.5" fill="var(--ink)">"price" : 3.40</text>
+        <rect x="275" y="190" width="190" height="34" rx="2" fill="#fff" stroke="var(--line)"/>
+        <text x="287" y="212" font-family="var(--mono)" font-size="12.5" fill="var(--ink)">"hot" : True</text>
+      </g>
+
+      <g>
+        <rect x="492" y="70" width="215" height="188" rx="3" fill="var(--mint)" stroke="var(--green)" stroke-width="1.5" stroke-dasharray="5 4"/>
+        <text x="504" y="94" font-family="var(--mono)" font-size="12" font-weight="700" fill="var(--green)">[2] a dictionary</text>
+        <rect x="504" y="106" width="190" height="34" rx="2" fill="#fff" stroke="var(--line)"/>
+        <text x="516" y="128" font-family="var(--mono)" font-size="12.5" fill="var(--ink)">"name" : "Iced tea"</text>
+        <rect x="504" y="148" width="190" height="34" rx="2" fill="#fff" stroke="var(--line)"/>
+        <text x="516" y="170" font-family="var(--mono)" font-size="12.5" fill="var(--ink)">"price" : 2.60</text>
+        <rect x="504" y="190" width="190" height="34" rx="2" fill="#fff" stroke="var(--line)"/>
+        <text x="516" y="212" font-family="var(--mono)" font-size="12.5" fill="var(--ink)">"hot" : False</text>
+      </g>
+    </svg>
+    </div>
+
+    <p>Three levels are visible there: the <strong>big box</strong> (a list), the <strong>medium boxes</strong> inside it (dictionaries), and the <strong>labelled slips</strong> inside those (the actual values). The list is only a wrapper &mdash; it holds no detail of its own. All the richness is in the dictionaries.</p>
+
+    <h3>Taking out &mdash; the address label</h3>
+    <p>To reach a value you write its address, and each bracket is one more line of that address, narrowing as it goes. Exactly like addressing an envelope: country, then city, then street, then house number.</p>
+
+    <p>Say you want just one thing from that menu &mdash; the name of the second drink. You cannot ask for it directly. You have to say which box, then which slip inside that box. Two steps, written as two brackets on one line.</p>
+
+    <div class="code-block"><code>print(menu[1]["name"])     <span class="code-comment"># Mocha</span></code></div>
+
+    <p>Read that left to right: <code>menu</code> is the whole thing, <code>[1]</code> opens the second dictionary, <code>["name"]</code> takes the slip labelled name. Each bracket narrows the target, like this.</p>
+
+    <div class="box-figure">
+    <svg viewBox="0 0 740 250" role="img" aria-label="Three stacked bars showing how each bracket narrows the address: menu gives the whole list, menu bracket 1 gives one dictionary, menu bracket 1 bracket name gives one value.">
+      <rect x="8" y="14" width="600" height="52" rx="3" fill="var(--panel)" stroke="var(--green)" stroke-width="2"/>
+      <text x="24" y="38" font-family="var(--mono)" font-size="16" font-weight="700" fill="var(--green)">menu</text>
+      <text x="24" y="56" font-family="var(--sans)" font-size="12.5" fill="var(--muted)">the whole box &mdash; every drink on the list</text>
+      <text x="620" y="46" font-family="var(--mono)" font-size="11.5" font-weight="700" fill="var(--coral)">3 items</text>
+
+      <path d="M40 66 L40 88" stroke="var(--coral)" stroke-width="2" fill="none"/>
+      <path d="M40 94 l-5 -9 h10 z" fill="var(--coral)"/>
+
+      <rect x="8" y="96" width="420" height="52" rx="3" fill="var(--panel)" stroke="var(--green)" stroke-width="2"/>
+      <text x="24" y="120" font-family="var(--mono)" font-size="16" font-weight="700" fill="var(--green)">menu<tspan fill="var(--coral)">[1]</tspan></text>
+      <text x="24" y="138" font-family="var(--sans)" font-size="12.5" fill="var(--muted)">one medium box &mdash; a single drink&rsquo;s dictionary</text>
+      <text x="440" y="128" font-family="var(--mono)" font-size="11.5" font-weight="700" fill="var(--coral)">3 keys</text>
+
+      <path d="M40 148 L40 170" stroke="var(--coral)" stroke-width="2" fill="none"/>
+      <path d="M40 176 l-5 -9 h10 z" fill="var(--coral)"/>
+
+      <rect x="8" y="178" width="260" height="52" rx="3" fill="var(--mint)" stroke="var(--green)" stroke-width="2"/>
+      <text x="24" y="202" font-family="var(--mono)" font-size="16" font-weight="700" fill="var(--green)">menu<tspan fill="var(--coral)">[1]["name"]</tspan></text>
+      <text x="24" y="220" font-family="var(--sans)" font-size="12.5" fill="var(--muted)">one slip &mdash; the value itself</text>
+      <text x="280" y="210" font-family="var(--mono)" font-size="11.5" font-weight="700" fill="var(--coral)">"Mocha"</text>
+    </svg>
+    </div>
+
+    <div class="callout"><p><strong>Read it left to right, outside in.</strong> Start with the biggest container and work inwards, one bracket at a time. Each bracket opens one more box. You cannot skip a level, and you cannot stay inside a box between lines &mdash; every line writes the full address again, or parks the box in a variable first.</p></div>
+
+    <h3>The same shape, five more times</h3>
+    <p>Once you are looking for containers, they turn up everywhere &mdash; including in places that have nothing to do with data.</p>
+
+    <div class="catalogue-wrap">
+    <table class="catalogue">
+      <thead><tr><th>Where you meet it</th><th>What the box is</th><th>What is inside</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Lists and dictionaries</strong></td><td>The collection</td><td>Values, or more collections</td></tr>
+        <tr><td><strong>Indentation</strong></td><td>An <code>if</code> or <code>for</code> block</td><td>The lines that belong to it &mdash; indentation <em>is</em> the box wall</td></tr>
+        <tr><td><strong>Nested calls</strong></td><td><code>int(input("How many? "))</code></td><td>A box inside a box. The inner one opens first</td></tr>
+        <tr><td><strong>Functions</strong></td><td>A sealed room</td><td>Private variables nobody outside can see</td></tr>
+        <tr><td><strong>Decorators</strong></td><td>A wrapper function</td><td>The original function, unopened, tucked inside</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <p>Indentation is the one worth pausing on, because it does not look like a container at all. But it is: the indented lines under an <code>if</code> are <em>inside</em> it, and the un-indented line after is <em>outside</em>. When a total prints three times instead of once, that is a box-boundary problem &mdash; the <code>print</code> is inside the loop when it should be outside.</p>
+
+    <div class="callout callout--amber"><p><strong>The sentence to carry with you.</strong> Building a box uses one kind of bracket. Reaching into a box uses another. Nearly every bracket question in Python is really the question &mdash; <em>am I making something, or am I opening something?</em></p></div>
+  </section>
+
+
+  <section class="lesson" id="vocabulary">
+    <div class="lesson-head"><p class="lesson-no">04</p><div><p class="eyebrow">The names nobody explains</p><h2>The vocabulary map</h2></div></div>
+    <p class="thesis">These are the proper terms, what each one actually means in plain English, and where the detail lives. Knowing the word is not pedantry &mdash; it is what lets you search for an answer, read an error message, or follow a tutorial that assumes you already know.</p>
+    <div class="catalogue-wrap">
+    <table class="catalogue">
+      <thead><tr><th>Proper name</th><th>What it actually means</th><th>Chapter</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Syntax</strong></td><td>The punctuation rules. Where colons go, which bracket to use, how quotes nest.</td><td><a href="02-symbols-and-punctuation.html">02</a></td></tr>
+        <tr><td><strong>Keyword</strong></td><td>A word that is part of the language&rsquo;s grammar. There are only 35. You cannot rename them.</td><td><a href="03-words.html">03</a></td></tr>
+        <tr><td><strong>Built-in function</strong></td><td>A function available without importing anything &mdash; <code>print</code>, <code>len</code>, <code>input</code>. Not a keyword.</td><td><a href="03-words.html">03</a></td></tr>
+        <tr><td><strong>Method</strong></td><td>A function that belongs to a thing, reached with a dot &mdash; <code>.append()</code>, <code>.lower()</code>.</td><td><a href="03-words.html">03</a></td></tr>
+        <tr><td><strong>Data type</strong></td><td>What kind of thing a value is: text, whole number, decimal, true/false.</td><td><a href="04-values-and-conversion.html">04</a></td></tr>
+        <tr><td><strong>Casting</strong> / type conversion</td><td>Turning one kind into another &mdash; <code>int()</code>, <code>str()</code>, <code>float()</code>.</td><td><a href="04-values-and-conversion.html">04</a></td></tr>
+        <tr><td><strong>Operator</strong></td><td>A symbol that does work: <code>+</code>, <code>==</code>, <code>%</code>, <code>and</code>, <code>in</code>.</td><td><a href="04-values-and-conversion.html">04</a></td></tr>
+        <tr><td><strong>Truthiness</strong></td><td>Whether a value counts as yes or no when tested on its own, without a comparison.</td><td><a href="04-values-and-conversion.html">04</a></td></tr>
+        <tr><td><strong>Control flow</strong></td><td>The order instructions run in. Normally top to bottom &mdash; until something changes it.</td><td><a href="01-reading-and-planning-code.html">01</a></td></tr>
+        <tr><td><strong>Conditional</strong> / branching</td><td>Choosing a path &mdash; <code>if</code>, <code>elif</code>, <code>else</code>.</td><td><a href="06-decisions.html">06</a></td></tr>
+        <tr><td><strong>Data structure</strong></td><td>A shape for holding several values at once: list, dictionary, tuple, set.</td><td><a href="07-collections.html">07</a></td></tr>
+        <tr><td><strong>Indexing</strong></td><td>Reaching into a collection for one item, by position or by name.</td><td><a href="07-collections.html">07</a></td></tr>
+        <tr><td><strong>Slicing</strong></td><td>Taking a run of several items out of a collection at once.</td><td><a href="07-collections.html">07</a></td></tr>
+        <tr><td><strong>Iteration</strong></td><td>Repeating &mdash; visiting each item in turn, or looping until told to stop.</td><td><a href="08-loops.html">08</a></td></tr>
+        <tr><td><strong>Accumulator</strong></td><td>A variable created before a loop that the loop builds up as it goes.</td><td><a href="08-loops.html">08</a></td></tr>
+        <tr><td><strong>String formatting</strong></td><td>Building a sentence with values dropped into it &mdash; f-strings.</td><td><a href="09-text-output.html">09</a></td></tr>
+        <tr><td><strong>Function</strong></td><td>A named set of steps, written once, run whenever called.</td><td><a href="10-functions.html">10</a></td></tr>
+        <tr><td><strong>Parameter</strong> vs <strong>argument</strong></td><td>The empty slot in the definition, versus the actual value you put in it when calling.</td><td><a href="10-functions.html">10</a></td></tr>
+        <tr><td><strong>Return value</strong></td><td>What a function hands back out. Not the same as what it prints.</td><td><a href="10-functions.html">10</a></td></tr>
+        <tr><td><strong>Scope</strong> / namespace</td><td>Which names are visible from where. Why a variable inside a function is invisible outside it.</td><td><a href="10-functions.html">10</a></td></tr>
+        <tr><td><strong>Higher-order function</strong></td><td>A function that takes another function as input, or hands one back.</td><td><a href="11-decorators.html">11</a></td></tr>
+        <tr><td><strong>Decorator</strong></td><td>The <code>@</code> shorthand for wrapping one function inside another.</td><td><a href="11-decorators.html">11</a></td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <section class="lesson" id="expressions">
+    <div class="lesson-head"><p class="lesson-no">05</p><div><p class="eyebrow">The distinction underneath everything</p><h2>Expressions and statements</h2></div></div>
+    <p class="thesis">This one is almost never taught, and it quietly explains a dozen things that otherwise look like arbitrary rules.</p>
+    <div class="versus">
+      <article>
+        <p class="card-label">Expression</p>
+        <h3>Produces a value</h3>
+        <p>Ask it a question and you get something back. It can be put anywhere a value could go &mdash; inside brackets, after an <code>=</code>, inside another expression.</p>
+        <div class="code-block"><code>2 + 2
+len(tools)
+menu[3]["name"]
+price * 0.9
+name.upper()</code></div>
+      </article>
+      <article>
+        <p class="card-label">Statement</p>
+        <h3>Does something</h3>
+        <p>It performs an action or directs the flow. It does not produce a value, so it cannot be tucked inside anything else.</p>
+        <div class="code-block"><code>total = 5
+if price &gt; 10:
+for tool in tools:
+return total
+import math</code></div>
+      </article>
+    </div>
+    <div class="callout"><p><strong>Why this matters.</strong> It is the reason <code>print(len(tools))</code> works but <code>print(if x)</code> is a syntax error. <code>len(tools)</code> is an expression &mdash; it produces a value, so it can sit inside <code>print()</code>. <code>if x</code> is a statement &mdash; it produces nothing, so there is nothing for <code>print()</code> to receive.</p></div>
+    <p>The same distinction explains why you can nest <code>int(input("How many? "))</code> &mdash; both are expressions, each producing a value for the next one out to work on. And it is the real reason behind the keyword-versus-function difference in <a href="03-words.html">Chapter 03</a>: functions are expressions, keywords are grammar.</p>
+    <div class="callout callout--amber"><p><strong>The quick test.</strong> Could this sit on the right-hand side of an <code>=</code> sign? If yes, it is an expression. <code>x = len(tools)</code> is fine. <code>x = if price &gt; 10</code> is nonsense.</p></div>
+  </section>
+
+  <section class="lesson" id="errors">
+    <div class="lesson-head"><p class="lesson-no">06</p><div><p class="eyebrow">Reading the red text</p><h2>The three kinds of error</h2></div></div>
+    <p class="thesis">Errors feel like one undifferentiated wall of red. They are not. There are three families, they fail at different moments, and knowing which one you are looking at tells you where to go hunting.</p>
+    <div class="three">
+      <article class="card">
+        <p class="card-label">Family one &middot; before anything runs</p>
+        <h3>SyntaxError</h3>
+        <p>Python could not <em>read</em> your file. It never got as far as running a single line &mdash; not even the correct ones above the mistake.</p>
+        <p>Usually a missing colon, an unclosed bracket, or a stray character. The line number it reports is reliable.</p>
+        <p><small><strong>Friendly, oddly.</strong> Nothing ran, so nothing half-happened.</small></p>
+      </article>
+      <article class="card">
+        <p class="card-label">Family two &middot; while running</p>
+        <h3>NameError, TypeError,<br>KeyError, IndexError</h3>
+        <p>Python read the file fine and started running it, then hit something impossible partway through.</p>
+        <p>A name that does not exist. A number where text was needed. A dictionary key that is not there. A list position past the end.</p>
+        <p><small><strong>Everything above the failure already happened.</strong></small></p>
+      </article>
+      <article class="card card--dark">
+        <p class="card-label">Family three &middot; no error at all</p>
+        <h3>Wrong answer</h3>
+        <p>The program runs start to finish and gives you a number. The number is wrong.</p>
+        <p>Python is satisfied, so it says nothing. Discount applied to everyone. Total off by one. Loop that never ran.</p>
+        <p><small><strong>The hardest kind</strong> &mdash; nothing tells you it happened.</small></p>
+      </article>
+    </div>
+    <div class="callout"><p><strong>The one habit worth building.</strong> Read the <em>last</em> line of the error first &mdash; that is the error type and message. The lines above are the path Python took to get there, and are mostly noise until you know what you are looking for.</p></div>
+  </section>
+
+  <section class="lesson" id="stuck">
+    <div class="lesson-head"><p class="lesson-no">07</p><div><p class="eyebrow">When you know the symptom, not the topic</p><h2>I&rsquo;m stuck on&hellip;</h2></div></div>
+    <p class="thesis">Most of the time you do not know what the topic is called &mdash; you only know what went wrong. Find the symptom, follow the link.</p>
+    <div class="catalogue-wrap">
+    <table class="catalogue">
+      <thead><tr><th>What you are seeing</th><th>What it usually means</th><th>Go to</th></tr></thead>
+      <tbody>
+        <tr><td>My total prints as <code>None</code></td><td>The function printed instead of returning, or the return was never caught.</td><td><a href="10-functions.html#print-versus-return">print vs return</a></td></tr>
+        <tr><td><code>list indices must be integers</code></td><td>Reaching into a list with a name instead of a number &mdash; often the plural name inside a loop.</td><td><a href="08-loops.html#the-plural-name-is-finished-with">Loop variables</a></td></tr>
+        <tr><td>My discount applies to everyone</td><td>Testing truthiness instead of comparing to a specific answer.</td><td><a href="04-values-and-conversion.html#truthiness">Truthiness</a></td></tr>
+        <tr><td><code>can only concatenate str</code></td><td>Adding a number to text, or text to a number, without converting.</td><td><a href="04-values-and-conversion.html#input-always-hands-back-text">input() and text</a></td></tr>
+        <tr><td><code>SyntaxError: invalid syntax</code> on an <code>if</code> or <code>for</code> line</td><td>A missing colon, or a stray one on a line that should not have it.</td><td><a href="02-symbols-and-punctuation.html#colons-open-blocks">Colons</a></td></tr>
+        <tr><td><code>NameError</code> for something I definitely wrote</td><td>Defined below the line that uses it, or spelled differently.</td><td><a href="01-reading-and-planning-code.html#top-to-bottom">Execution order</a></td></tr>
+        <tr><td>My slice is one item short</td><td>The stop number is exclusive.</td><td><a href="07-collections.html#the-stop-number-is-exclusive">Slicing</a></td></tr>
+        <tr><td>My last item keeps disappearing</td><td>A negative number used as a stop instead of leaving it blank.</td><td><a href="07-collections.html#counting-from-the-right">Negative indices</a></td></tr>
+        <tr><td>Changing a variable inside a function crashes</td><td>Assigning to a name makes it local for the whole function.</td><td><a href="10-functions.html#the-scope-trap">The scope trap</a></td></tr>
+        <tr><td>My variable vanishes after the function ends</td><td>It was local. The room is sealed.</td><td><a href="10-functions.html#the-sealed-room">The sealed room</a></td></tr>
+        <tr><td>The output runs in an order I did not expect</td><td>A decorator has repointed the name.</td><td><a href="11-decorators.html#why-they-feel-backwards">Why decorators feel backwards</a></td></tr>
+        <tr><td>Only my first item gets processed</td><td>Something is indented outside the loop that should be inside it, or vice versa.</td><td><a href="01-reading-and-planning-code.html#top-to-bottom">Execution order</a></td></tr>
+        <tr><td>I cannot get two values out of the same dictionary</td><td>The positional step has to be written in full each time, or parked in a variable.</td><td><a href="07-collections.html#the-positional-slot-rule">The positional slot rule</a></td></tr>
+        <tr><td>My decimals print as <code>3.4000000001</code></td><td>No format specifier on the f-string.</td><td><a href="09-text-output.html#format-specifiers">Format specifiers</a></td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <section class="lesson" id="chapters">
+    <div class="lesson-head"><p class="lesson-no">08</p><div><p class="eyebrow">The reference itself</p><h2>The eleven chapters</h2></div></div>
+    <p class="thesis">Ordered simple to complex, roughly the sequence you meet these things while writing a program. Not written to be read cover to cover &mdash; open the one you need.</p>
+    <div class="guide-grid">
+      <a class="guide-card card" href="01-reading-and-planning-code.html"><span class="brand-mark" aria-hidden="true">&#9656;</span><h3>Reading and planning code</h3><p>Seeing the shape of a problem before writing syntax, and the rule about the order code runs in.</p></a>
+      <a class="guide-card card" href="02-symbols-and-punctuation.html"><span class="brand-mark" aria-hidden="true">[{(</span><h3>Symbols and punctuation</h3><p>Which bracket does what, where colons belong, how quotes nest, and joining text to values.</p></a>
+      <a class="guide-card card" href="03-words.html"><span class="brand-mark" aria-hidden="true">def</span><h3>Words</h3><p>Keywords, built-in functions and methods &mdash; three categories that look alike and behave differently.</p></a>
+      <a class="guide-card card" href="04-values-and-conversion.html"><span class="brand-mark" aria-hidden="true">str</span><h3>Values and conversion</h3><p>What a value is, converting between kinds, truthiness, <code>len()</code>, modulo and <code>+=</code>.</p></a>
+      <a class="guide-card card" href="05-naming.html"><span class="brand-mark" aria-hidden="true">x =</span><h3>Naming</h3><p>Naming for the role rather than the moment, and being precise about what a number represents.</p></a>
+      <a class="guide-card card" href="06-decisions.html"><span class="brand-mark" aria-hidden="true">if ?</span><h3>Decisions</h3><p>How branches line up, where <code>elif</code> sits, and what happens when you flip a comparison.</p></a>
+      <a class="guide-card card" href="07-collections.html"><span class="brand-mark" aria-hidden="true">[ : ]</span><h3>Collections</h3><p>Chained lookups, the positional slot rule, slicing, and counting from the right.</p></a>
+      <a class="guide-card card" href="08-loops.html"><span class="brand-mark" aria-hidden="true">&#8635;</span><h3>Loops</h3><p>The loop variable, and the full account of when <code>enumerate()</code> earns its place.</p></a>
+      <a class="guide-card card" href="09-text-output.html"><span class="brand-mark" aria-hidden="true">f" "</span><h3>Text output</h3><p>F-strings pulling from any source, and controlling how numbers appear.</p></a>
+      <a class="guide-card card" href="10-functions.html"><span class="brand-mark" aria-hidden="true">( )&#8594;</span><h3>Functions</h3><p>print versus return, the sealed room, the scope trap, defaults, and argument order.</p></a>
+      <a class="guide-card card" href="11-decorators.html"><span class="brand-mark" aria-hidden="true">@</span><h3>Decorators</h3><p>The parcel analogy, a full execution trace, and the two-pass method for reading them.</p></a>
+    </div>
+    <div class="future-note">
+      <p><strong>Why the coverage is uneven.</strong> Every entry started as a real confusion, written up at the moment it was understood rather than copied from a textbook. So this maps what actually caused trouble, not what a syllabus says should be covered.</p>
+      <p>Chapters 05 and 06 are short for that reason. They are not less important; they simply caused less grief.</p>
+    </div>
+  </section>
+
+  <nav class="chapter-nav" aria-label="Start reading">
+    <a class="chap-prev" href="#four"><span>&#8592; On this page</span><strong>What a program actually does</strong></a>
+    <a class="chap-next" href="01-reading-and-planning-code.html"><span>Next &#8594;</span><strong>01 &middot; Reading and planning code</strong></a>
+  </nav>
+  <footer>
+    <p>Python Insights &mdash; a working reference. Eleven chapters, forty-three entries, built from notes taken while learning.</p>
+  </footer>
+</main>
+</body>
+</html>

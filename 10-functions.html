@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Functions &middot; Python Insights</title>
+<link rel="stylesheet" href="assets/lesson-guide.css">
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<aside class="rail" aria-label="Guide navigation">
+  <div class="brand"><a class="brand-mark brand-home" href="index.html" aria-label="Back to the overview"><span aria-hidden="true">( )&#8594;</span></a><div><p class="eyebrow">Python insights</p><p class="brand-name">Functions</p></div></div>
+  <nav class="section-nav" aria-label="On this page"><ol>
+    
+    <li><a href="#print-versus-return"><span>01</span> print versus return</a></li><li><a href="#the-sealed-room"><span>02</span> The sealed room</a></li><li><a href="#the-scope-trap"><span>03</span> The scope trap</a></li><li><a href="#return-versus-global"><span>04</span> return versus global</a></li><li><a href="#default-parameters"><span>05</span> Default parameters</a></li><li><a href="#the-slot-model"><span>06</span> The slot model</a></li><li><a href="#the-keyword-argument-order-rule"><span>07</span> The keyword argument order rule</a></li>
+  </ol></nav>
+  <nav class="course-nav" aria-label="Chapters">
+    <p>Chapters</p>
+    <ol>
+      <li><a href="index.html"><span>00</span> Overview</a></li>
+      <li><a href="01-reading-and-planning-code.html"><span>01</span> Reading and planning code</a></li>
+      <li><a href="02-symbols-and-punctuation.html"><span>02</span> Symbols and punctuation</a></li>
+      <li><a href="03-words.html"><span>03</span> Words</a></li>
+      <li><a href="04-values-and-conversion.html"><span>04</span> Values and conversion</a></li>
+      <li><a href="05-naming.html"><span>05</span> Naming</a></li>
+      <li><a href="06-decisions.html"><span>06</span> Decisions</a></li>
+      <li><a href="07-collections.html"><span>07</span> Collections</a></li>
+      <li><a href="08-loops.html"><span>08</span> Loops</a></li>
+      <li><a href="09-text-output.html"><span>09</span> Text output</a></li>
+      <li><a href="10-functions.html" aria-current="page"><span>10</span> Functions</a></li>
+      <li><a href="11-decorators.html"><span>11</span> Decorators</a></li>
+    </ol>
+  </nav>
+  <div class="rail-note"><p><strong>A working reference.</strong></p><p>Open the chapter you are stuck in. Not written to be read cover to cover.</p><a class="rail-tidy" href="https://github.com/TidyWeb" target="_blank" rel="noopener"><img src="assets/tidyweb_logo_basalt_gold_transparent.png" alt=""><span><strong>TidyWeb</strong><small>View this project on GitHub</small></span></a></div>
+</aside>
+<main id="content">
+  <header class="hero">
+    <div><p class="eyebrow">Chapter 10</p><h1 class="intro-title"><span>Functions</span></h1><p class="lede">The sealed room. What goes in, what comes out, and what stays private.</p></div>
+    <div class="hero-index"><strong>10</strong><span>chapter</span></div>
+  </header>
+
+  <section class="lesson" id="print-versus-return">
+    <div class="lesson-head"><p class="lesson-no">01</p><div><p class="eyebrow">Functions</p><h2>print versus return</h2></div></div>
+    <p><strong><code>print()</code> shows something on screen but hands nothing back — a function with no <code>return</code> always gives back <code>None</code>.</strong></p>
+<div class="code-block"><code>def broken_double(n):
+    print(n * 2)
+
+result = broken_double(5)   <span class="code-comment"># prints 10</span>
+print(result)                <span class="code-comment"># prints None</span></code></div>
+<p><code>print</code> and <code>return</code> do genuinely different jobs. <code>print</code> is for a human to look at; <code>return</code> is for the <em>program</em> to use the value afterward. A function can do both, either, or neither — but if you try to capture the result of a function that only prints, you get <code>None</code>, not the number you saw on screen.</p>
+  </section>
+  <section class="lesson" id="the-sealed-room">
+    <div class="lesson-head"><p class="lesson-no">02</p><div><p class="eyebrow">Functions</p><h2>The sealed room</h2></div></div>
+    <p><strong>FUNCTION SCOPE — a function is a sealed room.</strong></p>
+<p>Variables created inside a function only exist inside that function. Once the function finishes running, they're gone — nothing outside can see or use them. Variables created outside a function, at the top level, are visible everywhere, including inside functions. It only works one way: something made outside can be used inside (the outside can "shout in"), but something made inside stays trapped inside and disappears once the function ends — outside code can never reach in and grab it.</p>
+<p>Indentation marks the boundary exactly the same way it does for <code>if</code>/<code>for</code>/<code>else</code>: a line indented under <code>def some_function():</code> belongs to that function's block ("inside"); a line back at the left margin is "outside," in scope everywhere.</p>
+<p>Important exception within this pattern: <code>if</code>/<code>elif</code>/<code>else</code>/<code>for</code>/ <code>while</code> blocks are NOT sealed rooms — they're organisational only. Variables created inside them are still visible on the left edge afterward, same global scope throughout. A function block is the only block type that seals — this is the one case where the usual "indented = sub-process, return to left edge for the result" reading doesn't fully apply.</p>
+  </section>
+  <section class="lesson" id="the-scope-trap">
+    <div class="lesson-head"><p class="lesson-no">03</p><div><p class="eyebrow">Functions</p><h2>The scope trap</h2></div></div>
+    <p><strong>Assigning to a variable name anywhere inside a function makes Python treat it as local for the <em>entire</em> function — even before that line runs.</strong></p>
+<div class="code-block"><code>total = 100
+def spend(amount):
+    total = total - amount   <span class="code-comment"># errors: UnboundLocalError</span>
+    return total</code></div>
+<p>The mere presence of <code>total = ...</code> anywhere in the function body is enough for Python to decide <code>total</code> is local to that function, full stop — it does <em>not</em> quietly fall back to reading the outer <code>total</code> on the right-hand side first. This is why the function errors before it even gets to run the subtraction.</p>
+<p><strong>Spotting it before it bites.</strong> Python decides a variable is local at <em>compile</em> time, by scanning the whole function body for any assignment to that name — before a single line executes. So you can do the same scan yourself. For any name inside a function, ask two questions in this order:</p>
+<p>1. Does this name get assigned to <em>anywhere</em> in this function? (<code>=</code>, <code>+=</code>, <code>-=</code>, or as a <code>for</code> loop variable — all count.) 2. Does a variable of the same name also exist outside?</p>
+<p>Two yeses means you have this bug, and it will fire on whichever line reads that name first. One yes or none, and you are fine.</p>
+<p>The reason <code>+=</code> catches people out is that it does not look like an assignment. It is. <code>total += amount</code> is <code>total = total + amount</code> wearing a disguise, so it triggers the local decision exactly the same way.</p>
+<p><strong>Fix A — pass in, return out. This is the default.</strong></p>
+<div class="code-block"><code>total = 100
+
+def spend(amount, current_total):
+    return current_total - amount
+
+total = spend(20, total)   <span class="code-comment"># reassign on the outside</span>
+print(total)               <span class="code-comment"># 80</span></code></div>
+<p>The function no longer knows or cares that an outer <code>total</code> exists. It receives a number, produces a number, and the caller decides what to do with the result. Everything the function depends on is visible in its own brackets, which is why this is the version to reach for by default.</p>
+<p>Note the shape of the last call: <code>total = spend(...)</code>. The function cannot change <code>total</code> for you, so <em>you</em> do the reassignment, on the outside, using what it handed back.</p>
+<p><strong>Fix B — rename the local so there is no clash at all.</strong></p>
+<p>Sometimes you genuinely do want a fresh local variable and you only tripped over this because you reused a name by accident.</p>
+<div class="code-block"><code>takings = 100
+
+def daily_report(sales):
+    running = 0          <span class="code-comment"># a new name, nothing outside is called this</span>
+    for sale in sales:
+        running += sale
+    return running
+
+print(daily_report([10, 20, 30]))   <span class="code-comment"># 60</span>
+print(takings)                      <span class="code-comment"># 100, untouched</span></code></div>
+<p>No error, because <code>running</code> clashes with nothing. Half the time this bug is not a scope problem at all — it is a naming collision, and the cheapest fix is a different name.</p>
+<p><strong>Fix C — <code>global</code>. Know it, avoid it.</strong></p>
+<div class="code-block"><code>takings = 0
+
+def add_sale(amount):
+    global takings       <span class="code-comment"># "use the outer one, don't make a local"</span>
+    takings += amount
+
+add_sale(15)
+add_sale(20)
+print(takings)           <span class="code-comment"># 35</span></code></div>
+<p>This works and you will see it in other people's code, so you need to recognise it. The reason to avoid it: the function now has a hidden dependency. Reading <code>add_sale(15)</code> on its own tells you nothing about what it changes — you have to go and read the body to find out it quietly reaches out and edits <code>takings</code>. With Fix A, the call site tells you everything. Learn <code>global</code> so you can read it; reach for Fix A when you write.</p>
+<p><strong>The case that works fine, for contrast.</strong></p>
+<p>Reading an outer variable is never a problem. It is only assigning that triggers the local decision.</p>
+<div class="code-block"><code>shop_name = "Ravi's Coffee"
+
+def banner():
+    print(f"Welcome to {shop_name}")   <span class="code-comment"># read only — fine</span>
+
+banner()</code></div>
+<p>Nothing in <code>banner</code> assigns to <code>shop_name</code>, so Python never marks it local, and the outer one is found without any special handling. This is worth holding onto, because it means you do not need to pass <em>everything</em> in as a parameter — only the things you intend to change.</p>
+  </section>
+  <section class="lesson" id="return-versus-global">
+    <div class="lesson-head"><p class="lesson-no">04</p><div><p class="eyebrow">Functions</p><h2>return versus global</h2></div></div>
+    <p><strong>TWO PIPELINES OUT OF A FUNCTION'S SEALED ROOM — <code>return</code> vs <code>global</code>.</strong></p>
+<p><code>return</code> is a passive pipeline: the function hands a value out, but whoever called it has to actively catch it (store it in a variable, or wrap the call in <code>print()</code>) or the value is lost. Nothing outside is changed by <code>return</code> alone.</p>
+<p><code>global</code> is an active pipeline in the other direction: written as <code>global some_name</code> inside a function, it tells Python "don't create a new local variable — reach out and edit the real outside one directly." Without it, assigning to a name that matches an outside variable silently creates a separate, sealed, local copy instead — looks like an update, isn't one.</p>
+<p>Two different tools, two different directions: <code>return</code> sends a value out on request; <code>global</code> reaches out and changes something that already exists outside.</p>
+<p><strong>What "the value is lost" actually looks like.</strong> This is the failure the word "passive" is warning about, and it's silent — no error, no warning, nothing:</p>
+<div class="code-block"><code>def double(n):
+    return n * 2
+
+double(5)          <span class="code-comment"># runs, returns 10, and the 10 vanishes</span>
+print("done")</code></div>
+<p>Output is just <code>done</code>. The function ran. It calculated 10. It handed 10 back. And because nothing was waiting to catch it, Python threw it away.</p>
+<p><strong>The three ways to catch it.</strong> There is no fourth:</p>
+<div class="code-block"><code>result = double(5)      <span class="code-comment"># 1. store it in a variable</span>
+print(double(5))        <span class="code-comment"># 2. feed it straight into something else</span>
+total = double(5) + 1   <span class="code-comment"># 3. use it directly in an expression</span></code></div>
+<p>All three work because in each one, the returned value has somewhere to land. A bare <code>double(5)</code> on its own line has nowhere.</p>
+<p><strong>Why this is worth watching for specifically.</strong> A function that only <em>prints</em> works fine when called bare — <code>greet()</code> on its own line does its job. So the habit of calling functions bare is correct, right up until the function starts returning instead of printing, at which point the same habit silently discards the answer. The switch from print-functions to return-functions is exactly where this bites.</p>
+<p><strong>The question to ask of every call you write:</strong> does this function <em>print</em> its result, or <em>return</em> it? If it returns, the call must appear on the right-hand side of an <code>=</code>, or inside something else. If it prints, a bare call is correct.</p>
+  </section>
+  <section class="lesson" id="default-parameters">
+    <div class="lesson-head"><p class="lesson-no">05</p><div><p class="eyebrow">Functions</p><h2>Default parameters</h2></div></div>
+    <p><strong>DEFAULT PARAMETER VALUES — a fallback so the function never breaks from a missing argument.</strong></p>
+<p><code>def serve_dish(name, dish="pasta", spice_level="medium"):</code> — the <code>="pasta"</code> and <code>="medium"</code> aren't assignments happening now, they're fallback values sitting ready. Without a default, every parameter is mandatory — leave one out of a call and Python throws a hard error, no exceptions. With a default, that parameter becomes optional: if a call doesn't supply it, Python quietly uses the fallback instead, and the function still runs successfully rather than breaking.</p>
+<p>Defaults only matter for calls that omit something. A call that supplies every value overrides every default and behaves identically whether defaults exist or not — the whole point of a default is to keep the function usable even when information is missing, not to change behaviour when it isn't.</p>
+  </section>
+  <section class="lesson" id="the-slot-model">
+    <div class="lesson-head"><p class="lesson-no">06</p><div><p class="eyebrow">Functions</p><h2>The slot model</h2></div></div>
+    <p><strong>THE "SLOT" MODEL — parameters are numbered slots in the <code>def</code> line, filled either by count (positional) or by label (keyword).</strong></p>
+<p><code>def book_table(name, time="7pm", guests=2):</code> creates three slots in a fixed order: slot 1 = <code>name</code>, slot 2 = <code>time</code>, slot 3 = <code>guests</code>. No parameter is inherently "the positional one" or "the keyword one" — any slot can be filled either way, depending purely on how that particular call writes it.</p>
+<ul><li><strong>Positional fill</strong>: no label, matched purely by counting position left to right — "this is the next unfilled slot in order."</li><li><strong>Keyword fill</strong>: labelled with <code>name=</code>, matched directly to that slot regardless of position, no counting involved.</li></ul>
+<p>Why mixing them backwards breaks: once a call uses a label, Python stops counting positional slots. Any unlabelled value that shows up <em>after</em> a labelled one has no reliable slot left to land in, because the count was abandoned partway through. The error is about the <em>order of labelled vs unlabelled arguments in the call</em>, not about which specific parameter is involved.</p>
+  </section>
+  <section class="lesson" id="the-keyword-argument-order-rule">
+    <div class="lesson-head"><p class="lesson-no">07</p><div><p class="eyebrow">Functions</p><h2>The keyword argument order rule</h2></div></div>
+    <p><strong>HARD RULE — once a call switches to keyword arguments, everything after must also be keyword. No going back to positional.</strong></p>
+<p><code>book_table("Ravi", guests=4)</code> — fine. Positional first (<code>"Ravi"</code> fills <code>name</code> by slot), keyword after (<code>guests=4</code> by label). Nothing positional comes after the keyword one.</p>
+<p><code>book_table(guests=4, "Ravi")</code> — SyntaxError. Once <code>guests=4</code> breaks the left-to-right count by naming itself, Python has no reliable way to know what slot the next unlabelled value (<code>"Ravi"</code>) should fill — the count that positional relies on is already broken.</p>
+<p>Rule of thumb: <strong>positional first for the obvious values, keyword after for anything further along or being set apart from a default.</strong> Not a style choice — get the order backwards and the program won't run at all, not just misbehave silently.</p>
+  </section>
+  <nav class="chapter-nav" aria-label="Previous and next chapter"><a class="chap-prev" href="09-text-output.html"><span>&#8592; Previous</span><strong>09 &middot; Text output</strong></a><a class="chap-next" href="11-decorators.html"><span>Next &#8594;</span><strong>11 &middot; Decorators</strong></a></nav>
+  <footer>
+    <p>Python Insights &mdash; a working reference. Chapter 10 of 11.</p>
+  </footer>
+</main>
+</body>
+</html>

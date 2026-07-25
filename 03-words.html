@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Words &middot; Python Insights</title>
+<link rel="stylesheet" href="assets/lesson-guide.css">
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<aside class="rail" aria-label="Guide navigation">
+  <div class="brand"><a class="brand-mark brand-home" href="index.html" aria-label="Back to the overview"><span aria-hidden="true">def</span></a><div><p class="eyebrow">Python insights</p><p class="brand-name">Words</p></div></div>
+  <nav class="section-nav" aria-label="On this page"><ol>
+    
+    <li><a href="#keywords-versus-functions"><span>01</span> Keywords versus functions</a></li><li><a href="#methods-versus-functions"><span>02</span> Methods versus functions</a></li>
+  </ol></nav>
+  <nav class="course-nav" aria-label="Chapters">
+    <p>Chapters</p>
+    <ol>
+      <li><a href="index.html"><span>00</span> Overview</a></li>
+      <li><a href="01-reading-and-planning-code.html"><span>01</span> Reading and planning code</a></li>
+      <li><a href="02-symbols-and-punctuation.html"><span>02</span> Symbols and punctuation</a></li>
+      <li><a href="03-words.html" aria-current="page"><span>03</span> Words</a></li>
+      <li><a href="04-values-and-conversion.html"><span>04</span> Values and conversion</a></li>
+      <li><a href="05-naming.html"><span>05</span> Naming</a></li>
+      <li><a href="06-decisions.html"><span>06</span> Decisions</a></li>
+      <li><a href="07-collections.html"><span>07</span> Collections</a></li>
+      <li><a href="08-loops.html"><span>08</span> Loops</a></li>
+      <li><a href="09-text-output.html"><span>09</span> Text output</a></li>
+      <li><a href="10-functions.html"><span>10</span> Functions</a></li>
+      <li><a href="11-decorators.html"><span>11</span> Decorators</a></li>
+    </ol>
+  </nav>
+  <div class="rail-note"><p><strong>A working reference.</strong></p><p>Open the chapter you are stuck in. Not written to be read cover to cover.</p><a class="rail-tidy" href="https://github.com/TidyWeb" target="_blank" rel="noopener"><img src="assets/tidyweb_logo_basalt_gold_transparent.png" alt=""><span><strong>TidyWeb</strong><small>View this project on GitHub</small></span></a></div>
+</aside>
+<main id="content">
+  <header class="hero">
+    <div><p class="eyebrow">Chapter 03</p><h1 class="intro-title"><span>Words</span></h1><p class="lede">Telling apart keywords, functions and methods &mdash; and why the difference matters.</p></div>
+    <div class="hero-index"><strong>03</strong><span>chapter</span></div>
+  </header>
+
+  <section class="lesson" id="keywords-versus-functions">
+    <div class="lesson-head"><p class="lesson-no">01</p><div><p class="eyebrow">Words</p><h2>Keywords versus functions</h2></div></div>
+    <p><strong>KEYWORDS vs FUNCTIONS — the bracket test.</strong></p>
+<p>Both are reserved, built into Python (shown purple in syntax highlighting) — <code>def</code>, <code>if</code>, <code>for</code>, <code>global</code>, <code>return</code> are all keywords. But keywords and functions behave differently, and there's a reliable tell: <strong>functions are called using round brackets <code>()</code>, because they can take input through those brackets</strong> — <code>print(x)</code>, <code>len(my_list)</code>. Keywords are instructions about code structure itself, not something you call with input — they never take brackets. <code>return some_value</code> just needs a bare value sitting after it; no brackets required or standard, unlike <code>print(some_value)</code>.</p>
+<p>Test: needs <code>()</code> to work → function. No brackets, just a bare word followed by whatever it operates on → keyword.</p>
+<p><strong>IMPORTANT CORRECTION — the bracket test works one way only.</strong></p>
+<p>The test is reliable in this direction:</p>
+<div class="callout"><p><strong>Takes <code>()</code> and passes values in → it's a function.</strong></p></div>
+<p>It is <em>not</em> reliable in reverse. "No brackets → keyword" fails, because several keywords are followed by a value and look exactly like the thing the test says they aren't:</p>
+<div class="code-block"><code>not is_member          <span class="code-comment"># keyword, no brackets, takes a value</span>
+"y" in answers         <span class="code-comment"># keyword, no brackets, takes two values</span>
+del tools[0]           <span class="code-comment"># keyword, no brackets, takes a value</span>
+return total           <span class="code-comment"># keyword, no brackets, takes a value</span></code></div>
+<p>And it fails in the other direction too — brackets can appear after a keyword for grouping, which is not a call:</p>
+<div class="code-block"><code>return (price * 2)     <span class="code-comment"># brackets are maths grouping, not a call</span>
+if (a and b):          <span class="code-comment"># same — grouping, allowed but unnecessary</span></code></div>
+<p><strong>The reliable test instead — what is it <em>for</em>?</strong></p>
+<ul><li>A <strong>keyword</strong> is part of the language's grammar. It's a word Python's parser recognises structurally: it opens a block, or directs the flow, or modifies a statement. You cannot rename it, reassign it, or pass it around.</li><li>A <strong>function</strong> is a <em>value</em> that happens to be callable. It has a name that points at it, exactly like a variable does, and that name can be reassigned or passed to something else.</li></ul>
+<p>That last point is the definitive one, and you have already met it in Chapter 11 (Decorators): <code>@add_lights</code> works precisely <em>because</em> <code>decorate_tree</code> is a name pointing at a function value, and the decorator repoints it. No keyword can be handed around like that.</p>
+<p><strong>The practical check, if you're unsure of a specific word:</strong> try assigning it to something.</p>
+<div class="code-block"><code>x = print        <span class="code-comment"># fine. print is a value.</span>
+x = if           <span class="code-comment"># SyntaxError. "if" is grammar, not a value.</span></code></div>
+<p><strong>The complete keyword list, so it can be settled by looking.</strong> There are only 35, and you've met most of them:</p>
+<div class="code-block code-block--out"><code>False   None    True    and     as      assert   async
+await   break   class   continue def    del      elif
+else    except  finally for     from    global   if
+import  in      is      lambda  nonlocal not     or
+pass    raise   return  try     while   with     yield</code></div>
+<p>Anything not on that list is not a keyword. <code>print</code>, <code>len</code>, <code>input</code>, <code>int</code>, <code>range</code>, <code>enumerate</code> are all absent from it — they're <strong>built-in functions</strong>, which is a different category despite also being coloured distinctively by most editors.</p>
+<p><strong>Why the syntax highlighting misleads.</strong> Editors often colour keywords and built-in functions similarly, which is what makes them look like one group. They aren't: keywords are the grammar of the language, built-ins are just functions that happen to be available without importing anything. The proof is that you <em>can</em> (though shouldn't) reassign a built-in — <code>print = 5</code> is legal and will break your program — whereas <code>if = 5</code> is a syntax error.</p>
+  </section>
+  <section class="lesson" id="methods-versus-functions">
+    <div class="lesson-head"><p class="lesson-no">02</p><div><p class="eyebrow">Words</p><h2>Methods versus functions</h2></div></div>
+    <p><strong>Methods vs functions — both are instructions, but attach differently.</strong></p>
+<p>A <strong>method</strong> is attached to a specific object with a dot: <code>.append()</code>, <code>.lower()</code>, <code>.strip()</code> all mean "do this action to the thing immediately on my left." A <strong>function</strong> stands alone and takes its input inside brackets instead: <code>enumerate(members)</code>, <code>int(input(...))</code>. Both do a job, neither is "more powerful" than the other — the distinction is just how each one receives what it's acting on.</p>
+  </section>
+  <nav class="chapter-nav" aria-label="Previous and next chapter"><a class="chap-prev" href="02-symbols-and-punctuation.html"><span>&#8592; Previous</span><strong>02 &middot; Symbols and punctuation</strong></a><a class="chap-next" href="04-values-and-conversion.html"><span>Next &#8594;</span><strong>04 &middot; Values and conversion</strong></a></nav>
+  <footer>
+    <p>Python Insights &mdash; a working reference. Chapter 03 of 11.</p>
+  </footer>
+</main>
+</body>
+</html>

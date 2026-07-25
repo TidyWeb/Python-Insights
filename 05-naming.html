@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Naming &middot; Python Insights</title>
+<link rel="stylesheet" href="assets/lesson-guide.css">
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<aside class="rail" aria-label="Guide navigation">
+  <div class="brand"><a class="brand-mark brand-home" href="index.html" aria-label="Back to the overview"><span aria-hidden="true">x =</span></a><div><p class="eyebrow">Python insights</p><p class="brand-name">Naming</p></div></div>
+  <nav class="section-nav" aria-label="On this page"><ol>
+    
+    <li><a href="#name-the-role-not-the-outcome"><span>01</span> Name the role, not the outcome</a></li><li><a href="#naming-what-a-number-means"><span>02</span> Naming what a number means</a></li>
+  </ol></nav>
+  <nav class="course-nav" aria-label="Chapters">
+    <p>Chapters</p>
+    <ol>
+      <li><a href="index.html"><span>00</span> Overview</a></li>
+      <li><a href="01-reading-and-planning-code.html"><span>01</span> Reading and planning code</a></li>
+      <li><a href="02-symbols-and-punctuation.html"><span>02</span> Symbols and punctuation</a></li>
+      <li><a href="03-words.html"><span>03</span> Words</a></li>
+      <li><a href="04-values-and-conversion.html"><span>04</span> Values and conversion</a></li>
+      <li><a href="05-naming.html" aria-current="page"><span>05</span> Naming</a></li>
+      <li><a href="06-decisions.html"><span>06</span> Decisions</a></li>
+      <li><a href="07-collections.html"><span>07</span> Collections</a></li>
+      <li><a href="08-loops.html"><span>08</span> Loops</a></li>
+      <li><a href="09-text-output.html"><span>09</span> Text output</a></li>
+      <li><a href="10-functions.html"><span>10</span> Functions</a></li>
+      <li><a href="11-decorators.html"><span>11</span> Decorators</a></li>
+    </ol>
+  </nav>
+  <div class="rail-note"><p><strong>A working reference.</strong></p><p>Open the chapter you are stuck in. Not written to be read cover to cover.</p><a class="rail-tidy" href="https://github.com/TidyWeb" target="_blank" rel="noopener"><img src="assets/tidyweb_logo_basalt_gold_transparent.png" alt=""><span><strong>TidyWeb</strong><small>View this project on GitHub</small></span></a></div>
+</aside>
+<main id="content">
+  <header class="hero">
+    <div><p class="eyebrow">Chapter 05</p><h1 class="intro-title"><span>Naming</span></h1><p class="lede">What to call things, and why a badly named variable causes real errors later.</p></div>
+    <div class="hero-index"><strong>05</strong><span>chapter</span></div>
+  </header>
+
+  <section class="lesson" id="name-the-role-not-the-outcome">
+    <div class="lesson-head"><p class="lesson-no">01</p><div><p class="eyebrow">Naming</p><h2>Name the role, not the outcome</h2></div></div>
+    <p><strong>Name a variable after its role, not the one outcome you're picturing while you write it.</strong></p>
+<p>When you write a line of code you usually have one concrete case in your head — a special large coffee, say — and the temptation is to name the variable after <em>that</em>.</p>
+<div class="code-block"><code>menu = {"regular": {"small": 2.20, "large": 3.00},
+        "special": {"small": 2.80, "large": 3.60}}
+
+coffee_type = input("Regular or special? ")
+cup_size    = input("Small or large? ")
+
+spec_lrg_price = menu[coffee_type][cup_size]     <span class="code-comment"># a lie waiting</span></code></div>
+<p>That name is only true if the customer happens to order a special large. <code>coffee_type</code> and <code>cup_size</code> are <strong>selectors</strong> — they hold whatever the user typed, which changes on every single run. Order a regular small and the program cheerfully stores 2.20 in a variable called <code>spec_lrg_price</code>.</p>
+<div class="code-block"><code>price = menu[coffee_type][cup_size]              <span class="code-comment"># true every time</span></code></div>
+<p>Name it after what it <em>is</em> — a price — not after one result it might produce on one particular run.</p>
+<p><strong>The test.</strong> Ask whether the name will still be honest tomorrow, with different input. If the value comes from user input, a calculation, or a lookup, the name has to describe the <em>category</em> of thing it holds, because you cannot know the specific thing in advance.</p>
+<p><strong>Where this bites later.</strong> A misleading name does not cause an error, so nothing tells you. It causes something worse: you read <code>spec_lrg_price</code> further down the file, believe it, and reason about the rest of your code on a false premise. The bug appears somewhere else entirely, and the wrong name is what sent you looking in the wrong place.</p>
+<p><strong>The related habit, from loops.</strong> The same principle is why loop variables are worth spelling out. <code>for person in staff:</code> makes a wrong line look wrong, where <code>for s in staff:</code> hides it. A good name does work for you every time you read it.</p>
+  </section>
+  <section class="lesson" id="naming-what-a-number-means">
+    <div class="lesson-head"><p class="lesson-no">02</p><div><p class="eyebrow">Naming</p><h2>Naming what a number means</h2></div></div>
+    <p><strong>"What's removed" and "what's left" are two different numbers — check which one a formula actually produces before naming it.</strong></p>
+<p>Any discount involves two entirely different numbers, and it is easy to name one after the other because both are "about" the discount.</p>
+<div class="code-block"><code>price = 20.00
+discount_rate = 0.25          <span class="code-comment"># 25% off</span>
+
+<span class="code-comment"># WHAT'S LEFT - the customer pays this</span>
+final_price = price * (1 - discount_rate)
+print(final_price)            <span class="code-comment"># 15.0</span>
+
+<span class="code-comment"># WHAT'S REMOVED - the amount knocked off</span>
+discount = price * discount_rate
+print(discount)               <span class="code-comment"># 5.0</span></code></div>
+<p>Two formulas, two results, two names. The mistake is writing the first formula and calling the result <code>discount</code>:</p>
+<div class="code-block"><code>discount = price * (1 - discount_rate)     <span class="code-comment"># holds 15.0, not 5.0</span></code></div>
+<p>No error. The number is correct for what it calculates. But the label on the tin is wrong, and later on <code>total - discount</code> will quietly give you nonsense.</p>
+<p><strong>The check that settles it, before you name anything.</strong> Say the formula out loud in plain English and listen to the noun you end up with:</p>
+<ul><li><code>price * (1 - discount_rate)</code> → <em>"the price, less a quarter of it"</em> → that noun is <strong>a price</strong></li><li><code>price * discount_rate</code> → <em>"a quarter of the price"</em> → that noun is <strong>an amount off</strong></li></ul>
+<p>Name the variable after the noun you said. If you cannot say the formula in English, that is worth knowing too — it usually means the formula is not doing what you assume.</p>
+<p><strong>Why this is the same lesson as the entry above.</strong> Both are about naming what a thing genuinely <em>is</em>, rather than what you were thinking about while you typed it. The topic was discounts, so <code>discount</code> came to mind — but the formula produced a price.</p>
+  </section>
+  <nav class="chapter-nav" aria-label="Previous and next chapter"><a class="chap-prev" href="04-values-and-conversion.html"><span>&#8592; Previous</span><strong>04 &middot; Values and conversion</strong></a><a class="chap-next" href="06-decisions.html"><span>Next &#8594;</span><strong>06 &middot; Decisions</strong></a></nav>
+  <footer>
+    <p>Python Insights &mdash; a working reference. Chapter 05 of 11.</p>
+  </footer>
+</main>
+</body>
+</html>

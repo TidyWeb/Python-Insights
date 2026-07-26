@@ -231,6 +231,44 @@
 
     <p>Indentation is the one worth pausing on, because it does not look like a container at all. But it is: the indented lines under an <code>if</code> are <em>inside</em> it, and the un-indented line after is <em>outside</em>. When a total prints three times instead of once, that is a box-boundary problem &mdash; the <code>print</code> is inside the loop when it should be outside.</p>
 
+    <h3>Decisions are boxes too &mdash; and the outer one is asked first</h3>
+
+    <p>Everything so far has been about data. But the most useful place this idea turns up has nothing to do with lists at all. It is about <strong>working out which question comes first</strong> &mdash; and getting that wrong is a far more expensive mistake than any bracket error, because nothing tells you it happened.</p>
+
+    <p>Here is the shape of it. A coffee stall gives you a long price list, and then mentions almost in passing that there are two ranges &mdash; regular and luxury &mdash; priced differently. It is easy to read the price list first, start writing, and never notice that the range is a question sitting <em>above</em> everything else.</p>
+
+    <div class="code-block"><code><span class="code-comment"># The outer question, asked first</span>
+if coffee_type == "luxury":
+    <span class="code-comment"># The inner question, asked only once we are in here</span>
+    if cup_size == "large":
+        price = 3.60
+    else:
+        price = 2.80
+else:
+    if cup_size == "large":
+        price = 3.00
+    else:
+        price = 2.20</code></div>
+
+    <p>The indentation is the box wall. <code>cup_size</code> is never asked on its own &mdash; it is only ever asked <em>inside</em> an answer to <code>coffee_type</code>. Get that order the wrong way round and you end up writing the same price list twice and still getting it wrong.</p>
+
+    <h3>The same problem, written as data</h3>
+
+    <p>Now watch what happens when the identical decision is written as nested containers instead.</p>
+
+    <div class="code-block"><code>menu = {"regular": {"small": 2.20, "large": 3.00},
+        "luxury":  {"small": 2.80, "large": 3.60}}
+
+price = menu[coffee_type][cup_size]</code></div>
+
+    <p><strong>It is the same shape.</strong> The outer key is the outer <code>if</code>. The inner key is the inner <code>if</code>. Ten lines of decisions and three lines of data are expressing one identical structure &mdash; one made of indentation, the other made of brackets.</p>
+
+    <div class="callout"><p><strong>This is what &ldquo;program logic&rdquo; actually means.</strong> Finding the outer question is not a coding skill. It is a planning act, done in plain English before you type anything. Once you have found it, you can express it either way &mdash; and the fact that both versions look alike is the proof that the thinking was the real work.</p></div>
+
+    <p>The tell to watch for: <strong>when a problem hands you a long list of options and mentions a category split almost as an aside, the category split is usually the outer box.</strong> The long list is loud and arrives first; the outer question is quiet and easy to miss. Sort into categories first, then process within them.</p>
+
+    <div class="callout"><p><strong>But do not nest everything.</strong> Two levels of <code>if</code> is clear. Three is getting hard to hold. Four is a mess, and at that depth the data version wins outright &mdash; a dictionary stays readable at a depth where nested conditionals stop being followable. Real problems are rarely two levels deep, which is exactly why knowing both forms matters: the point is not to nest, but to <em>see</em> the nesting and then choose how to write it.</p></div>
+
     <div class="callout callout--amber"><p><strong>The sentence to carry with you.</strong> Building a box uses one kind of bracket. Reaching into a box uses another. Nearly every bracket question in Python is really the question &mdash; <em>am I making something, or am I opening something?</em></p></div>
   </section>
 
@@ -247,11 +285,18 @@
         <tr><td><strong>Built-in function</strong></td><td>A function available without importing anything &mdash; <code>print</code>, <code>len</code>, <code>input</code>. Not a keyword.</td><td><a href="03-words.html">03</a></td></tr>
         <tr><td><strong>Method</strong></td><td>A function that belongs to a thing, reached with a dot &mdash; <code>.append()</code>, <code>.lower()</code>.</td><td><a href="03-words.html">03</a></td></tr>
         <tr><td><strong>Data type</strong></td><td>What kind of thing a value is: text, whole number, decimal, true/false.</td><td><a href="04-values-and-conversion.html">04</a></td></tr>
+        <tr><td><strong>Boolean</strong></td><td>A value that can only ever be <code>True</code> or <code>False</code>. Not the words &mdash; the actual values.</td><td><a href="04-values-and-conversion.html">04</a></td></tr>
         <tr><td><strong>Casting</strong> / type conversion</td><td>Turning one kind into another &mdash; <code>int()</code>, <code>str()</code>, <code>float()</code>.</td><td><a href="04-values-and-conversion.html">04</a></td></tr>
         <tr><td><strong>Operator</strong></td><td>A symbol that does work: <code>+</code>, <code>==</code>, <code>%</code>, <code>and</code>, <code>in</code>.</td><td><a href="04-values-and-conversion.html">04</a></td></tr>
+        <tr><td><strong>Comparison operators</strong></td><td><code>==</code>, <code>!=</code>, <code>&gt;</code>, <code>&lt;</code>, <code>&gt;=</code>, <code>&lt;=</code>. Each one asks a question and answers with a Boolean.</td><td><a href="06-decisions.html">06</a></td></tr>
+        <tr><td><strong>Logical operators</strong></td><td><code>and</code>, <code>or</code>, <code>not</code>. These combine Booleans into one answer.</td><td><a href="06-decisions.html">06</a></td></tr>
+        <tr><td><strong>Logic</strong> &mdash; sense one:<br><em>boolean logic</em></td><td>The narrow, technical meaning. True and false, and the operators that combine and compare them. Mechanical, and it either works or it does not.</td><td><a href="06-decisions.html">06</a></td></tr>
+        <tr><td><strong>Logic</strong> &mdash; sense two:<br><em>program logic</em></td><td>The loose, everyday meaning. The reasoning your code encodes &mdash; and above all, <strong>which question you ask first</strong>. This is a planning act, done before any code is written.</td><td><a href="#boxes">03</a></td></tr>
         <tr><td><strong>Truthiness</strong></td><td>Whether a value counts as yes or no when tested on its own, without a comparison.</td><td><a href="04-values-and-conversion.html">04</a></td></tr>
         <tr><td><strong>Control flow</strong></td><td>The order instructions run in. Normally top to bottom &mdash; until something changes it.</td><td><a href="01-reading-and-planning-code.html">01</a></td></tr>
         <tr><td><strong>Conditional</strong> / branching</td><td>Choosing a path &mdash; <code>if</code>, <code>elif</code>, <code>else</code>.</td><td><a href="06-decisions.html">06</a></td></tr>
+        <tr><td><strong>Errors</strong>:<br><em>syntax / runtime / logic</em></td><td>The three families of thing that can go wrong, named by <em>when</em> Python noticed. The third one never announces itself.</td><td><a href="#errors">06</a></td></tr>
+        <tr><td><strong>Nesting</strong></td><td>One thing sitting inside another &mdash; a list inside a list, an <code>if</code> inside an <code>if</code>. The idea this whole page is built on.</td><td><a href="#boxes">03</a></td></tr>
         <tr><td><strong>Data structure</strong></td><td>A shape for holding several values at once: list, dictionary, tuple, set.</td><td><a href="07-collections.html">07</a></td></tr>
         <tr><td><strong>Indexing</strong></td><td>Reaching into a collection for one item, by position or by name.</td><td><a href="07-collections.html">07</a></td></tr>
         <tr><td><strong>Slicing</strong></td><td>Taking a run of several items out of a collection at once.</td><td><a href="07-collections.html">07</a></td></tr>
@@ -301,31 +346,33 @@ import math</code></div>
 
   <section class="lesson" id="errors">
     <div class="lesson-head"><p class="lesson-no">06</p><div><p class="eyebrow">Reading the red text</p><h2>The three kinds of error</h2></div></div>
-    <p class="thesis">Errors feel like one undifferentiated wall of red. They are not. There are three families, they fail at different moments, and knowing which one you are looking at tells you where to go hunting.</p>
+    <p class="thesis">Errors feel like one undifferentiated wall of red. They are not. There are three families, they fail at different moments, and knowing which one you are looking at tells you where to go hunting. The names below are the proper ones &mdash; you will meet all three in tutorials and error messages.</p>
     <div class="three">
       <article class="card">
         <p class="card-label">Family one &middot; before anything runs</p>
-        <h3>SyntaxError</h3>
+        <h3>Syntax errors</h3>
         <p>Python could not <em>read</em> your file. It never got as far as running a single line &mdash; not even the correct ones above the mistake.</p>
         <p>Usually a missing colon, an unclosed bracket, or a stray character. The line number it reports is reliable.</p>
         <p><small><strong>Friendly, oddly.</strong> Nothing ran, so nothing half-happened.</small></p>
       </article>
       <article class="card">
         <p class="card-label">Family two &middot; while running</p>
-        <h3>NameError, TypeError,<br>KeyError, IndexError</h3>
+        <h3>Runtime errors</h3>
         <p>Python read the file fine and started running it, then hit something impossible partway through.</p>
-        <p>A name that does not exist. A number where text was needed. A dictionary key that is not there. A list position past the end.</p>
+        <p><code>NameError</code>, <code>TypeError</code>, <code>KeyError</code>, <code>IndexError</code>. A name that does not exist. A number where text was needed. A key that is not there. A position past the end.</p>
         <p><small><strong>Everything above the failure already happened.</strong></small></p>
       </article>
       <article class="card card--dark">
         <p class="card-label">Family three &middot; no error at all</p>
-        <h3>Wrong answer</h3>
-        <p>The program runs start to finish and gives you a number. The number is wrong.</p>
-        <p>Python is satisfied, so it says nothing. Discount applied to everyone. Total off by one. Loop that never ran.</p>
+        <h3>Logic errors</h3>
+        <p>The program runs start to finish and gives you an answer. The answer is wrong.</p>
+        <p>Python is satisfied, so it says nothing. Discount applied to everyone. Total off by one. Loop that never ran. The questions asked in the wrong order.</p>
         <p><small><strong>The hardest kind</strong> &mdash; nothing tells you it happened.</small></p>
       </article>
     </div>
     <div class="callout"><p><strong>The one habit worth building.</strong> Read the <em>last</em> line of the error first &mdash; that is the error type and message. The lines above are the path Python took to get there, and are mostly noise until you know what you are looking for.</p></div>
+    <div class="callout callout--amber"><p><strong>The families are not watertight, and it helps to know that.</strong> They describe <em>when Python noticed</em>, not what you did wrong. A logic error will often disguise itself as a family two error &mdash; ask your questions in the wrong order and you may well get a <code>KeyError</code> rather than a wrong price. So a runtime error does not always mean a typo. Sometimes it means the plan was wrong, and Python tripped over the consequence.</p>
+    <p style="margin-top:.8rem">This is why family three is the one to fear. The other two announce themselves. A logic error only announces itself if you happen to check the answer &mdash; which is the entire argument for working out the shape of a problem in plain English <a href="#boxes">before you write any code</a>.</p></div>
   </section>
 
   <section class="lesson" id="stuck">

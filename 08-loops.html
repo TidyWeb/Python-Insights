@@ -44,7 +44,12 @@
     <p><strong>FUNDAMENTAL RECURRING CONFUSION — reaching for the original collection name instead of the loop variable the <code>for</code> line just created.</strong></p>
 <p>The diagnosis: the instinct is to keep looking back at <code>staff</code> (the thing that "exists" up top) to find <code>name</code>, rather than recognising that <code>for person in staff:</code> already created a brand-new tool — <code>person</code> — that holds exactly one item, fresh, every pass. Once inside the loop, the loop variable (<code>person</code>, <code>order</code>, <code>member</code>, whatever it's called that pass) IS the thing to reach into for a key lookup — not the original list name. The original list (<code>staff</code>) doesn't need touching again inside the loop body at all; the loop already did that job. This is about trusting a freshly-created loop variable as the correct target, not just the singular/plural naming distinction. Watch for this resurfacing across any new loop context, not just dictionaries.</p>
 <p><strong>The tell, and the fix.</strong> The symptom is always the same shape: a line inside a loop body that mentions the <em>plural</em> name.</p>
-<div class="code-block"><code>for person in staff:
+<div class="code-block"><code>staff = [
+    {"name": "Ravi", "role": "barista"},
+    {"name": "Ana",  "role": "manager"}
+]
+
+for person in staff:
     print(staff["name"])     <span class="code-comment"># wrong — reaching past the loop variable</span>
     print(person["name"])    <span class="code-comment"># right — reaching into this pass's item</span></code></div>
 <p>The first line errors, because <code>staff</code> is a list and <code>"name"</code> is not a valid list index. That error message — a list being asked for a string key — is the reliable signature of this exact mistake, so it is worth recognising on sight rather than reading as a mystery.</p>
@@ -59,14 +64,42 @@
     print(i, tool)</code></div>
 <div class="code-block code-block--out"><code>0 hammer
 1 saw</code></div>
-<p><strong>When to use it — the trigger.</strong> A plain loop (<code>for day in days:</code>) already gives you each value in turn. <code>enumerate</code> earns its place only when the position number is about to be <em>used for something</em>, and in practice that means one thing: reaching into a <strong>second list</strong> at the same position.</p>
+<p><strong>When to use it — the trigger.</strong> A plain loop already hands you each value in turn, so most of the time <code>enumerate</code> adds nothing. It earns its place in exactly one situation: when the position number is about to be <strong>used to reach into a second list</strong>.</p>
+<p>Here is that situation. A cinema listing, held as two separate lists that line up by position — day 0 goes with films 0, day 1 with films 1, and so on.</p>
+<div class="code-block"><code>days = ["Friday", "Saturday", "Sunday"]
+
+movies = [
+    ["Jaws", "Alien"],
+    ["Casablanca"],
+    ["The Thing", "Rear Window", "Vertigo"]
+]</code></div>
+<p>Nothing in Python ties <code>"Friday"</code> to <code>["Jaws", "Alien"]</code>. They are in two unrelated lists. The <em>only</em> thing connecting them is that both sit at position 0. So to print a day beside its films, you need that position number — which is precisely what <code>enumerate</code> provides.</p>
 <div class="code-block"><code>for index, day in enumerate(days):
-    print(day, movies[index])     <span class="code-comment"># index used to reach into movies</span></code></div>
-<p>That's the entire justification — cross-referencing two lists kept in sync by position. The rule:</p>
+    print(day)
+    for movie in movies[index]:
+        print("   ", movie)</code></div>
+<div class="code-block code-block--out"><code>Friday
+    Jaws
+    Alien
+Saturday
+    Casablanca
+Sunday
+    The Thing
+    Rear Window
+    Vertigo</code></div>
+<p>That is the entire justification for <code>enumerate</code> — cross-referencing two lists kept in sync by position. The rule:</p>
 <p><strong>Need the position number for a lookup elsewhere → <code>enumerate</code>. Just need each value → plain loop.</strong></p>
-<p>Reaching for it out of habit on every loop misses that trigger. In that same example, the inner loop <code>for movie in movies[index]:</code> does <em>not</em> use <code>enumerate</code>, and shouldn't — there's no second list to cross-reference, so the movie's value is all that's needed.</p>
+<p><strong>Now look at the inner loop, because it proves the rule.</strong></p>
+<div class="code-block"><code>for movie in movies[index]:      <span class="code-comment"># no enumerate, and rightly so</span></code></div>
+<p>The inner loop does <em>not</em> use <code>enumerate</code>, and should not. There is no second list to cross-reference a film against — the film's value is all that is needed. Same program, two loops, and only one of them meets the trigger.</p>
+<p>Reaching for <code>enumerate</code> on every loop out of habit is the common mistake. Ask first: <em>am I about to use that number for anything?</em></p>
 <p><strong>It always hands back exactly two things, and always in the same order: (position, item).</strong> Not three, not a configurable number — two.</p>
-<div class="code-block"><code>for i, order in enumerate(orders):     <span class="code-comment"># as far as this line can go</span></code></div>
+<div class="code-block"><code>orders = [
+    {"type": "latte", "size": "large"},
+    {"type": "mocha", "size": "small"}
+]
+
+for i, order in enumerate(orders):     <span class="code-comment"># as far as this line can go</span></code></div>
 <p>You cannot add more names to that unpacking to also catch fields from inside <code>order</code>. Those fields aren't siblings produced by <code>enumerate</code> — they're keys sitting inside the dictionary <code>order</code> already holds. Pulling them out is a separate step on its own line inside the loop body, using ordinary dictionary lookup:</p>
 <div class="code-block"><code>for i, order in enumerate(orders):
     print(i, order["type"], order["size"])    <span class="code-comment"># lookups, not unpacking</span></code></div>

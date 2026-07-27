@@ -47,22 +47,31 @@
   <section class="lesson" id="the-positional-slot-rule">
     <div class="lesson-head"><p class="lesson-no">02</p><div><p class="eyebrow">Collections</p><h2>The positional slot rule</h2></div></div>
     <p><strong>The positional slot rule — re-addressing beats "staying inside."</strong></p>
-<p>When pulling several values out of the same dictionary sitting inside a list, there's no way to look something up once and then keep asking follow-up questions about it. Every single value needs the full path spelled out again from scratch:</p>
-<div class="code-block"><code>menu[5]["name"]
-menu[5]["price"]</code></div>
-<p>Not <code>menu[5]</code> once and then <code>["name"]</code> and <code>["price"]</code> off the back of it as if Python remembers where you just were — it doesn't. Python has no concept of "still being inside" a lookup after the line finishes running. Each line is a fresh instruction, read fully, top to bottom, every time. It feels wrong because in spoken English, once you've said "the fifth item," you can just say "its name" and "its price" without repeating yourself — English carries context forward, Python doesn't.</p>
+<p>When pulling several values out of the same dictionary sitting inside a list, there's no way to look something up once and then keep asking follow-up questions about it. Every single value needs the full path spelled out again from scratch.</p>
+<p>Here is the kind of structure this happens with — a list, with a dictionary at every position:</p>
+<div class="code-block"><code>menu = [
+    {"name": "Espresso", "price": 2.20},
+    {"name": "Latte",    "price": 3.10},
+    {"name": "Mocha",    "price": 3.40}
+]</code></div>
+<p>To print the name and the price of the drink at position 2, the positional step has to be written out both times:</p>
+<div class="code-block"><code>menu[2]["name"]
+menu[2]["price"]</code></div>
+<p>Not <code>menu[2]</code> once and then <code>["name"]</code> and <code>["price"]</code> off the back of it as if Python remembers where you just were — it doesn't. Python has no concept of "still being inside" a lookup after the line finishes running. Each line is a fresh instruction, read fully, top to bottom, every time. It feels wrong because in spoken English, once you've said "the fifth item," you can just say "its name" and "its price" without repeating yourself — English carries context forward, Python doesn't.</p>
 <p><strong>The remedy: park the lookup in a variable, then reach into that.</strong></p>
-<p>You cannot make Python remember where you were — but you can hand the place you were to a variable, and that variable <em>does</em> persist across lines. This is the cure, and it is the thing that was missing from this note originally:</p>
-<div class="code-block"><code>item = menu[5]          <span class="code-comment"># do the positional step ONCE</span>
+<p>You cannot make Python remember where you were — but you can hand the place you were to a variable, and that variable <em>does</em> persist across lines:</p>
+<div class="code-block"><code>item = menu[2]          <span class="code-comment"># do the positional step ONCE</span>
 print(item["name"])     <span class="code-comment"># now reach into the parked thing</span>
 print(item["price"])</code></div>
-<p><code>item</code> now holds the actual dictionary sitting at position 5. Every line after that reaches into <code>item</code> directly, and the <code>[5]</code> never needs writing again. Two lookups become one lookup plus two cheap reaches.</p>
+<div class="code-block code-block--out"><code>Mocha
+3.4</code></div>
+<p><code>item</code> now holds the actual dictionary sitting at position 2. Every line after that reaches into <code>item</code> directly, and the <code>[2]</code> never needs writing again. Two lookups become one lookup plus two cheap reaches.</p>
 <p>This is the same manoeuvre as English carrying context forward — you just have to do it explicitly, by naming the thing, instead of expecting Python to infer it.</p>
 <p><strong>In a loop, the loop variable does this job for you already.</strong></p>
 <div class="code-block"><code>for item in menu:
     print(item["name"], item["price"])</code></div>
-<p>There is no positional step at all here. <code>for item in menu:</code> hands you one dictionary per pass, already parked in <code>item</code> — so the "address it fully every time" problem disappears entirely. This is worth noticing, because it means the re-addressing burden is mostly a symptom of reaching into a list <em>by number</em> rather than looping over it. If you find yourself writing <code>menu[5]["name"]</code> and <code>menu[5]["price"]</code> and <code>menu[5]["size"]</code> on three consecutive lines, that is the signal to either park it in a variable or use a loop.</p>
-<p><strong>When you genuinely do need the full path.</strong> Writing it out in full is correct and normal for a <em>single</em> one-off lookup — <code>print(menu[5]["name"])</code> on its own needs no variable. The parking manoeuvre earns its place from the second lookup onward, not the first.</p>
+<p>There is no positional step at all here. <code>for item in menu:</code> hands you one dictionary per pass, already parked in <code>item</code> — so the "address it fully every time" problem disappears entirely. This is worth noticing, because it means the re-addressing burden is mostly a symptom of reaching into a list <em>by number</em> rather than looping over it. If you find yourself writing <code>menu[2]["name"]</code> and <code>menu[2]["price"]</code> and <code>menu[2]["size"]</code> on three consecutive lines, that is the signal to either park it in a variable or use a loop.</p>
+<p><strong>When you genuinely do need the full path.</strong> Writing it out in full is correct and normal for a <em>single</em> one-off lookup — <code>print(menu[2]["name"])</code> on its own needs no variable. The parking manoeuvre earns its place from the second lookup onward, not the first.</p>
   </section>
   <section class="lesson" id="the-stop-number-is-exclusive">
     <div class="lesson-head"><p class="lesson-no">03</p><div><p class="eyebrow">Collections</p><h2>The stop number is exclusive</h2></div></div>

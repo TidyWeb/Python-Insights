@@ -11,7 +11,7 @@
 <aside class="rail" aria-label="Guide navigation">
   <div class="brand"><a class="brand-mark brand-home" href="index.html" aria-label="Back to the overview"><span aria-hidden="true">( )&#8594;</span></a><div><p class="eyebrow">Python insights</p><p class="brand-name">Functions</p></div></div>
   <nav class="section-nav" aria-label="On this page"><ol>
-    
+    <li><a href="#parameters-and-arguments"><span>00</span> Parameters and arguments</a></li>
     <li><a href="#print-versus-return"><span>01</span> print versus return</a></li><li><a href="#the-sealed-room"><span>02</span> The sealed room</a></li><li><a href="#the-scope-trap"><span>03</span> The scope trap</a></li><li><a href="#return-versus-global"><span>04</span> return versus global</a></li><li><a href="#default-parameters"><span>05</span> Default parameters</a></li><li><a href="#the-slot-model"><span>06</span> The slot model</a></li><li><a href="#the-keyword-argument-order-rule"><span>07</span> The keyword argument order rule</a></li>
   </ol></nav>
   <nav class="course-nav" aria-label="Chapters">
@@ -39,6 +39,54 @@
     <div class="hero-index"><strong>10</strong><span>chapter</span></div>
   </header>
 
+  <section class="lesson" id="parameters-and-arguments">
+    <div class="lesson-head"><p class="lesson-no">00</p><div><p class="eyebrow">Functions</p><h2>Parameters and arguments</h2></div></div>
+    
+    <p class="thesis">Two words you will meet everywhere, used almost interchangeably in conversation, that mean two genuinely different things. Worth ten minutes now, because every entry in this chapter assumes them.</p>
+
+    <h3>A function has two moments</h3>
+    <p>Writing a function and running a function are separate events, and each has its own vocabulary. Nothing about a function runs when you define it &mdash; Python only learns the recipe.</p>
+
+    <div class="code-block"><code><span class="code-comment"># MOMENT ONE - the definition. Nothing runs.</span>
+def apply_discount(price, rate):
+    return price * (1 - rate)
+
+
+<span class="code-comment"># MOMENT TWO - the call. Now it runs.</span>
+final = apply_discount(20.00, 0.25)
+print(final)</code></div>
+    <div class="code-block code-block--out"><code>15.0</code></div>
+
+    <div class="versus">
+      <article>
+        <p class="card-label">In the definition</p>
+        <h3>Parameters</h3>
+        <p><code>price</code> and <code>rate</code> are <strong>parameters</strong>. They are empty slots. They hold no value, and they exist only inside this function.</p>
+        <p>You are describing what the function <em>will need</em> when somebody eventually calls it.</p>
+      </article>
+      <article>
+        <p class="card-label">In the call</p>
+        <h3>Arguments</h3>
+        <p><code>20.00</code> and <code>0.25</code> are <strong>arguments</strong>. They are real values, handed over at the moment of calling.</p>
+        <p>They drop into the slots in order &mdash; <code>20.00</code> into <code>price</code>, <code>0.25</code> into <code>rate</code>.</p>
+      </article>
+    </div>
+
+    <div class="callout"><p><strong>The same slot, named from two sides.</strong> Parameter is the name when the slot is empty; argument is the name for what you put in it. Which word is correct depends entirely on whether you are looking at the definition or the call &mdash; not on the thing itself.</p></div>
+
+    <h3>Why &ldquo;argument&rdquo; only makes sense at the call</h3>
+    <p>Before a function is called there are no arguments, because nothing has been handed over yet. This is why the word turns up in error messages about <em>calling</em>:</p>
+
+    <div class="code-block"><code>apply_discount(20.00)</code></div>
+    <div class="code-block code-block--out"><code>TypeError: apply_discount() missing 1 required positional argument: 'rate'</code></div>
+
+    <p>Read that message with the vocabulary in place and it stops being cryptic. It names the function, says one argument is missing, says which slot is empty, and tells you it was expecting it by position. Every word is doing work.</p>
+
+    <div class="callout callout--amber"><p><strong>The bracket connection.</strong> An argument is not defined by being inside round brackets &mdash; it is defined by there being a function on the other end receiving it. In <code>(2 + 3) * 4</code> the brackets group; nothing is called, so nothing in there is an argument. The test from Chapter 02 still settles it: <em>is a name glued to the left of the bracket?</em> Glued means a call, and what is inside are arguments.</p></div>
+
+    <p>With that in place, the rest of this chapter follows: what a function hands back, what stays private inside it, what happens when a slot is left empty, and what the rules are when you start filling slots by name instead of by position.</p>
+
+  </section>
   <section class="lesson" id="print-versus-return">
     <div class="lesson-head"><p class="lesson-no">01</p><div><p class="eyebrow">Functions</p><h2>print versus return</h2></div></div>
     <p><strong><code>print()</code> shows something on screen but hands nothing back — a function with no <code>return</code> always gives back <code>None</code>.</strong></p>

@@ -44,6 +44,7 @@
     <p><strong>KEYWORDS vs FUNCTIONS — the bracket test.</strong></p>
 <p>Both are reserved, built into Python (shown purple in syntax highlighting) — <code>def</code>, <code>if</code>, <code>for</code>, <code>global</code>, <code>return</code> are all keywords. But keywords and functions behave differently, and there's a reliable tell: <strong>functions are called using round brackets <code>()</code>, because they can take input through those brackets</strong> — <code>print(x)</code>, <code>len(my_list)</code>. Keywords are instructions about code structure itself, not something you call with input — they never take brackets. <code>return some_value</code> just needs a bare value sitting after it; no brackets required or standard, unlike <code>print(some_value)</code>.</p>
 <p>Test: needs <code>()</code> to work → function. No brackets, just a bare word followed by whatever it operates on → keyword.</p>
+<p>The values you pass in through those brackets have a name: <strong>arguments</strong>. <code>print("hello")</code> passes one argument; <code>range(1, 6)</code> passes two. Keywords do not take arguments, because you are not calling them — <code>return total</code> is not passing <code>total</code> in to anything, it is a structural instruction with a value after it.</p>
 <p><strong>IMPORTANT CORRECTION — the bracket test works one way only.</strong></p>
 <p>The test is reliable in this direction:</p>
 <div class="callout"><p><strong>Takes <code>()</code> and passes values in → it's a function.</strong></p></div>

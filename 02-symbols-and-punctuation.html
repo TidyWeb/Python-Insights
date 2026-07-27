@@ -50,6 +50,11 @@ tools[0]                      <span class="code-comment"># "tools" glued left of
 print("hello")                <span class="code-comment"># "print" glued left of ( → calling</span>
 (2 + 3) * 4                   <span class="code-comment"># nothing glued left of ( → grouping</span></code></div>
 <p>Glued to a name → you are <em>doing something to that name</em> (reaching in, or calling it). Standing alone → you are <em>making a new thing</em>. That one test resolves <code>[</code>, <code>(</code>, and <code>{</code> alike, which is why it's worth having as a single habit rather than three separate rules.</p>
+<p><strong>The word for what goes inside a call.</strong> When round brackets are doing the <em>calling</em> job, whatever you put between them is called an <strong>argument</strong>.</p>
+<div class="code-block"><code>print("hello")        <span class="code-comment"># "hello" is an argument</span>
+len(tools)            <span class="code-comment"># tools is an argument</span>
+(2 + 3) * 4           <span class="code-comment"># 5 is NOT an argument - nothing was called</span></code></div>
+<p>This matters because the word is used constantly in tutorials and error messages, and it only applies to the calling job. Values in brackets used for grouping or for building a tuple are not arguments, because there is no function on the other end to receive them. Covered properly in Chapter 10.</p>
 <p><strong>Why the same symbols got reused for different jobs.</strong> Not because Python is being awkward — because the language only has three bracket shapes on a standard keyboard and needed more than three jobs. There's no deeper logic connecting "build a list" to "look something up"; they share <code>[]</code> by necessity, not by meaning. Knowing that stops you hunting for a connection that isn't there.</p>
   </section>
   <section class="lesson" id="does-double-duty">

@@ -41,9 +41,32 @@
 
   <section class="lesson" id="the-parcel-analogy">
     <div class="lesson-head"><p class="lesson-no">01</p><div><p class="eyebrow">Decorators</p><h2>The parcel analogy</h2></div></div>
-    <p><strong>DECORATORS — the parcel analogy (preferred over any plumbing/pipe framing).</strong></p>
-<p>A decorator is a box that receives another function as an unopened parcel, builds a new box around it, and hands the new box back — under the <em>original</em> function's name.</p>
-<ul><li><code>def add_lights(func):</code> — <code>func</code> is just a parameter name, like any other (<code>item_name</code>, <code>spell_name</code>) — not a keyword, arbitrary label. It's the inbox slot this box uses for incoming parcels.</li><li><code>@add_lights</code> above <code>def decorate_tree():</code> triggers, behind the scenes: the whole <code>decorate_tree</code> parcel — unopened, contents untouched — gets posted into <code>add_lights</code>, landing in the <code>func</code> slot.</li><li>Inside <code>add_lights</code>, a new box <code>wrapper</code> is built <em>around</em> that parcel. <code>wrapper</code> can see <code>func</code> because it's nested inside <code>add_lights</code> (same reachability rule as any nested scope). <code>wrapper</code>'s job: print something, <strong>open the <code>func</code> parcel</strong> (<code>func()</code> — the brackets mean "open this parcel and let its contents run"), print something else.</li><li><code>add_lights</code> returns <code>wrapper</code> itself — unopened, not yet run — and the name <code>decorate_tree</code> gets quietly repointed to this new <code>wrapper</code> box instead of the original plain parcel.</li><li>So <code>decorate_tree()</code> at the bottom no longer opens the original parcel directly — it opens <code>wrapper</code>, which opens the original parcel <em>through</em> <code>func()</code> partway through its own instructions.</li></ul>
+    <p><strong>A decorator is a box that receives another function as an unopened parcel, builds a new box around it, and hands the new box back — under the original function's name.</strong></p>
+<p><strong>Here is the whole thing first.</strong> Every name discussed below comes from these twelve lines, so it is worth having them in front of you.</p>
+<div class="code-block"><code>def add_lights(func):
+    def wrapper():
+        print("Untangling the lights")
+        func()
+        print("Switching them on")
+    return wrapper
+
+
+@add_lights
+def decorate_tree():
+    print("Hanging the baubles")
+
+
+decorate_tree()</code></div>
+<div class="code-block code-block--out"><code>Untangling the lights
+Hanging the baubles
+Switching them on</code></div>
+<p>Three things print, but only one of them was written inside <code>decorate_tree</code>. The other two came from <code>add_lights</code>, which <code>decorate_tree</code> never calls and never mentions.</p>
+<p><strong>The four moves, in order.</strong></p>
+<p><strong>1. The inbox slot.</strong> <code>def add_lights(func):</code> — <code>func</code> is just a parameter name like any other. It is <strong>not</strong> a keyword and carries no special meaning to Python; it is simply the slot this box uses for incoming parcels. It could be called <code>parcel</code> and nothing would change.</p>
+<p><strong>2. The posting.</strong> <code>@add_lights</code> sitting above <code>def decorate_tree():</code> triggers this behind the scenes: the whole <code>decorate_tree</code> parcel — unopened, contents untouched — gets posted into <code>add_lights</code>, landing in the <code>func</code> slot.</p>
+<p><strong>3. The new box is built around it.</strong> Inside <code>add_lights</code>, a new box called <code>wrapper</code> is built <em>around</em> that parcel. <code>wrapper</code> can see <code>func</code> because it is nested inside <code>add_lights</code> — the same reachability rule as any nested scope. Its job is: print something, <strong>open the <code>func</code> parcel</strong> with <code>func()</code>, then print something else. The brackets on <code>func()</code> mean "open this parcel and let its contents run".</p>
+<p><strong>4. The swap.</strong> <code>add_lights</code> returns <code>wrapper</code> itself — unopened, not yet run — and the name <code>decorate_tree</code> is quietly repointed at this new <code>wrapper</code> box instead of the original plain parcel.</p>
+<p>So <code>decorate_tree()</code> on the last line no longer opens the original parcel directly. It opens <code>wrapper</code>, which opens the original parcel <em>through</em> <code>func()</code>, partway through its own instructions. That is why two lines you never asked for appear around the one you did.</p>
   </section>
   <section class="lesson" id="why-they-feel-backwards">
     <div class="lesson-head"><p class="lesson-no">02</p><div><p class="eyebrow">Decorators</p><h2>Why they feel backwards</h2></div></div>
